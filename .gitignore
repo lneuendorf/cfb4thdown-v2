@@ -1,0 +1,30 @@
+# Dependencies and builds
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+*.tsbuildinfo
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Data (rebuildable from upstream; never committed)
+backend/data/
+backend/fixtures/
+backend/modeling/reports/
+frontend/src/dev/fixtures/
+
+# Local tooling
+.DS_Store
+.claude/settings.local.json
+*.log
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
