@@ -11,6 +11,7 @@ Environment:
 
 from __future__ import annotations
 
+import logging
 import os
 import sqlite3
 from collections.abc import Iterator
@@ -44,7 +45,7 @@ class ApiError(Exception):
 
 
 def db_path() -> Path:
-    return Path(os.environ.get("CFB4THDOWN_DB", str(db.DB_PATH)))
+    return db.db_path()
 
 
 def get_conn() -> Iterator[sqlite3.Connection]:
@@ -81,6 +82,7 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
+        _apply_schema()
         if scheduler:
             scheduler.start()
         yield
@@ -307,6 +309,21 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
         }
 
     return app
+
+
+def _apply_schema() -> None:
+    """Create tables and indexes added since the database was seeded, before serving.
+
+    Requests open the database read-only, so a deploy that adds tables would otherwise fail
+    until some job happened to connect. Never creates a database that doesn't exist."""
+    path = db_path()
+    if not path.exists():
+        return
+    try:
+        with db.connect(path):
+            pass
+    except sqlite3.Error as exc:  # e.g. a read-only mount; requests will report it
+        logging.getLogger("api").warning("could not apply schema to %s: %s", path, exc)
 
 
 def _older_than_window(start_date: str | None) -> bool:

@@ -8,6 +8,7 @@ play-by-play hash), wp_series. Team and coach aggregates (phase 3) are not here 
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import uuid
 from collections.abc import Iterator
@@ -20,6 +21,14 @@ import pandas as pd
 from modeling.config import DATA_DIR
 
 DB_PATH = DATA_DIR / "cfb4thdown.db"
+
+
+def db_path() -> Path:
+    """The SQLite file every job and the API use: CFB4THDOWN_DB if set (the Railway volume),
+    else backend/data/cfb4thdown.db. Resolved per call so the environment always wins."""
+    return Path(os.environ.get("CFB4THDOWN_DB") or DB_PATH)
+
+
 SCHEMA_GAME_COLUMNS = (
     "game_id", "season", "week", "season_type", "start_date", "neutral_site", "home_id",
     "home_team", "home_classification", "home_conference", "home_points", "away_id",
@@ -274,7 +283,8 @@ def now_iso() -> str:
 
 
 @contextmanager
-def connect(path: Path = DB_PATH) -> Iterator[sqlite3.Connection]:
+def connect(path: Path | None = None) -> Iterator[sqlite3.Connection]:
+    path = path or db_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path)
     conn.execute("PRAGMA foreign_keys = ON")

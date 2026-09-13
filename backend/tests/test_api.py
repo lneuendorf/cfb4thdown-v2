@@ -239,3 +239,17 @@ def test_simulate_validates_inputs(client):
         client.get("/api/v1/simulate?distance=1&yards_to_goal=5&period=1&clock=16:00").status_code
         == 400
     )
+
+
+def test_jobs_and_api_share_the_env_database(tmp_path, monkeypatch):
+    path = tmp_path / "volume.db"
+    monkeypatch.setenv("CFB4THDOWN_DB", str(path))
+    assert db.db_path() == path
+    with db.connect() as conn:  # what every job does
+        conn.execute("DROP TABLE coach_team_seasons")  # simulate a database seeded before Phase 3
+    with TestClient(main.create_app(scheduler_enabled=False)) as c:  # startup re-applies schema
+        assert c.get("/api/v1/health").status_code == 200
+    with db.connect() as conn:
+        assert conn.execute(
+            "SELECT name FROM sqlite_master WHERE name = 'coach_team_seasons'"
+        ).fetchone()
