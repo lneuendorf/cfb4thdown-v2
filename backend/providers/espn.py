@@ -23,10 +23,15 @@ import httpx
 from providers import rawstore
 
 SOURCE = "espn"
-BASE = "https://site.api.espn.com/apis/site/v2/sports/football/college-football"
+PATH = "/apis/site/v2/sports/football/college-football"
+# The site API answers on two hosts; the second is the fallback when the first refuses
+# (community reports of 403s from 2026-08-05) or errors.
+HOSTS = ("https://site.api.espn.com", "https://site.web.api.espn.com")
+BASE = HOSTS[0] + PATH
 FBS_GROUP = 80
 SNAP_TEXT = re.compile(r"^\((\d{1,2}):(\d{2})\)")
 DISPLAY_CLOCK = re.compile(r"^(\d{1,2}):(\d{2})$")
+RETRY_STATUSES = (403, 429, 500, 502, 503, 504)
 
 
 class ESPNError(RuntimeError):
@@ -34,19 +39,25 @@ class ESPNError(RuntimeError):
 
 
 def _get(url: str, params: dict[str, Any], retries: int = 3) -> bytes:
+    """GET with exponential backoff, alternating hosts on retryable failures."""
+    suffix = url.split(PATH, 1)[1] if PATH in url else ""
+    last = ""
     for attempt in range(retries + 1):
+        host = HOSTS[attempt % len(HOSTS)] if suffix else ""
+        target = f"{host}{PATH}{suffix}" if suffix else url
         try:
-            resp = httpx.get(url, params=params, timeout=30)
+            resp = httpx.get(target, params=params, timeout=30)
         except httpx.TransportError as exc:
-            if attempt == retries:
-                raise ESPNError(f"transport error {url}: {exc}") from exc
+            last = f"transport error {target}: {exc}"
         else:
             if resp.status_code == 200:
                 return resp.content
-            if resp.status_code not in (429, 500, 502, 503, 504) or attempt == retries:
-                raise ESPNError(f"{resp.status_code} for {url} {params}")
-        time.sleep(2**attempt)
-    raise ESPNError(f"gave up on {url}")
+            last = f"{resp.status_code} for {target} {params}"
+            if resp.status_code not in RETRY_STATUSES:
+                raise ESPNError(last)
+        if attempt < retries:
+            time.sleep(min(2**attempt, 8))
+    raise ESPNError(f"gave up: {last}")
 
 
 def fetch_scoreboard(dates: str | None = None) -> tuple[dict, str]:
