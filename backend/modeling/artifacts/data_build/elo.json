@@ -1,0 +1,1820 @@
+{
+  "params": {
+    "k": 35.0,
+    "home_field": 55.0,
+    "season_regression": 0.2,
+    "fcs_rating": 1000.0,
+    "mov_multiplier": true
+  },
+  "tuned_on_seasons": [
+    2003,
+    2012
+  ],
+  "eval_2013_2025": {
+    "n_games": 11219,
+    "log_loss": 0.5066066617652365,
+    "brier": 0.17007927087246746
+  },
+  "grid": [
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5085029100539955,
+      "brier": 0.16988445459830626
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.509902817555398,
+      "brier": 0.1704333535751563
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.514693594039357,
+      "brier": 0.17225720616883808
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5041411648065032,
+      "brier": 0.16819943605000848
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5058252127742184,
+      "brier": 0.16862918700242163
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.51191141732843,
+      "brier": 0.17063852683901443
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5069529391953879,
+      "brier": 0.16875725223699994
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5084163582816412,
+      "brier": 0.1690893754318162
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5150579494260193,
+      "brier": 0.17113138644006337
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5143799318061549,
+      "brier": 0.17099901716648203
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5154205154400185,
+      "brier": 0.17124476711794637
+    },
+    {
+      "k": 20.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5223026879123686,
+      "brier": 0.17324991279214383
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5080879042741867,
+      "brier": 0.16964262553626322
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5093205755843628,
+      "brier": 0.17014863916420933
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5139530657049417,
+      "brier": 0.17191367244961323
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.503725880289104,
+      "brier": 0.16801507459764475
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5051965081236373,
+      "brier": 0.16840094979865572
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5110403696840545,
+      "brier": 0.17031931828105423
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5065124178057032,
+      "brier": 0.16860088142743357
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5077361110395762,
+      "brier": 0.16889306815638513
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5140657728659291,
+      "brier": 0.17082090313445603
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5138988228682486,
+      "brier": 0.17085543427782945
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5146827920495128,
+      "brier": 0.17106611478094835
+    },
+    {
+      "k": 20.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5211867133187666,
+      "brier": 0.17293739059225818
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.508251575066874,
+      "brier": 0.16961475100506904
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5093237522469766,
+      "brier": 0.17008565573988407
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5138022356558202,
+      "brier": 0.1717980512450735
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5038938076009012,
+      "brier": 0.1680698667719439
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5051602608622291,
+      "brier": 0.16842026797597323
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5107684590866903,
+      "brier": 0.1702558580028521
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5066664704648847,
+      "brier": 0.16870597401973902
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5076615674574603,
+      "brier": 0.16896643609291867
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5136886232859624,
+      "brier": 0.1707901593926458
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5140306208009083,
+      "brier": 0.17099835257797927
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5145705747650039,
+      "brier": 0.1711815265825234
+    },
+    {
+      "k": 20.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5207086475735684,
+      "brier": 0.1729308770882573
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5075525678136446,
+      "brier": 0.16943759739771674
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5089150153565534,
+      "brier": 0.17005274019024166
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5130660518233425,
+      "brier": 0.1717083069842096
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5015545929910168,
+      "brier": 0.16741874473065643
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5033212454451211,
+      "brier": 0.16793077729154304
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5089139786567314,
+      "brier": 0.1698464004140612
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5028548528842649,
+      "brier": 0.1675346875741128
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5044725835441595,
+      "brier": 0.1679314990980697
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5107979054231909,
+      "brier": 0.16993616362661756
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5087598961540489,
+      "brier": 0.16920226379270226
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5099836761524097,
+      "brier": 0.1694901919363553
+    },
+    {
+      "k": 25.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5167251274380374,
+      "brier": 0.1715005527501884
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5070625454030823,
+      "brier": 0.16915268441920356
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5082843701499626,
+      "brier": 0.16973014479332935
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5123108615654358,
+      "brier": 0.1713411241536581
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.501075124143954,
+      "brier": 0.16719353884108012
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5026493435219467,
+      "brier": 0.16766199806635296
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5080370627811072,
+      "brier": 0.16950084378878089
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5023622201352564,
+      "brier": 0.167341710286552
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5037534456812217,
+      "brier": 0.16769624773797007
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5098009870078615,
+      "brier": 0.16959793812036758
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5082389710747964,
+      "brier": 0.16902712519009627
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5092117804486972,
+      "brier": 0.16927677438864655
+    },
+    {
+      "k": 25.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.515601802986767,
+      "brier": 0.17116036475224247
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5071549777809896,
+      "brier": 0.1690747498177845
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5082419301981105,
+      "brier": 0.1696215195822853
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5121476844717833,
+      "brier": 0.17119329963403543
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5011819919153886,
+      "brier": 0.16719937119862202
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5025718962433523,
+      "brier": 0.16763217979237918
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5077603776586406,
+      "brier": 0.169401389212786
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5024663544977042,
+      "brier": 0.16740114326617633
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5036412833280407,
+      "brier": 0.16772152791256592
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5094192090367089,
+      "brier": 0.16952924043143527
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5083320547725295,
+      "brier": 0.16912886862821216
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5090659469041998,
+      "brier": 0.16934800163288807
+    },
+    {
+      "k": 25.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5151157269398909,
+      "brier": 0.17111588919049509
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5082996033651286,
+      "brier": 0.1695499717438631
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5095557967365194,
+      "brier": 0.17019286683779716
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5131653475217415,
+      "brier": 0.17169730926584834
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5009385651831008,
+      "brier": 0.16729171198872456
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5027059469687875,
+      "brier": 0.16786433431213985
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5078367779160478,
+      "brier": 0.1696838239093114
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5009367145288538,
+      "brier": 0.16707167328920244
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5026423792414327,
+      "brier": 0.1675264653445661
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5086482168825877,
+      "brier": 0.16948724471110363
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5054952836282722,
+      "brier": 0.16829243059011434
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5068592084658993,
+      "brier": 0.16862343745104838
+    },
+    {
+      "k": 30.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5134404859511698,
+      "brier": 0.1706341869588064
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5077440527901969,
+      "brier": 0.16923067939292724
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5088801171756292,
+      "brier": 0.1698406232099903
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5123883406980223,
+      "brier": 0.1713104719668972
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5003994377042065,
+      "brier": 0.16703136248844347
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5019929651424303,
+      "brier": 0.16756169282930455
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.506947529185708,
+      "brier": 0.1693158855714669
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5003919593873001,
+      "brier": 0.1668453133340113
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5018841418217245,
+      "brier": 0.16725635936423766
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5076405311267652,
+      "brier": 0.16912407343007418
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5049309089703784,
+      "brier": 0.16808632969047285
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5060502671445871,
+      "brier": 0.16837624546218452
+    },
+    {
+      "k": 30.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.512303946747811,
+      "brier": 0.1702669952949485
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5077766317449052,
+      "brier": 0.1691128842746362
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5087977022739283,
+      "brier": 0.1696962198397678
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.512208194526546,
+      "brier": 0.17113629949610878
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5004517795244554,
+      "brier": 0.1669956574743372
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5018787463709211,
+      "brier": 0.16749113505930285
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5066623004879036,
+      "brier": 0.1691864159658754
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5004484616434272,
+      "brier": 0.1668641610263687
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5017366092934981,
+      "brier": 0.16723940984645777
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5072509429565643,
+      "brier": 0.16902222116869947
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5049842467360863,
+      "brier": 0.16814924482531116
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5058705825425569,
+      "brier": 0.16840595354091706
+    },
+    {
+      "k": 30.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5118069301532577,
+      "brier": 0.1701870183519352
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5102623825860982,
+      "brier": 0.17002680219982605
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5113892686110827,
+      "brier": 0.17067825367615264
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5145463614598019,
+      "brier": 0.17205309021780743
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5017284113081019,
+      "brier": 0.16759855456829756
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5034493459352084,
+      "brier": 0.16821692052611764
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5081586348812849,
+      "brier": 0.1699447980275596
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5005813151549835,
+      "brier": 0.16711606178728508
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5023291857378345,
+      "brier": 0.1676238917627656
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5080243714290015,
+      "brier": 0.1695388572954943
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5039320919602827,
+      "brier": 0.16797996246619826
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5054027160742083,
+      "brier": 0.16835529265663982
+    },
+    {
+      "k": 35.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5118136796414683,
+      "brier": 0.170363430620569
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5096467964481686,
+      "brier": 0.16967945697683234
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5106694639396586,
+      "brier": 0.17030211166316722
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5137416314732661,
+      "brier": 0.17164956010955912
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5011328050728777,
+      "brier": 0.16730754921551516
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5026961012880934,
+      "brier": 0.16788549941652978
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5072515789484787,
+      "brier": 0.16955738503520432
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.49998462945855426,
+      "brier": 0.16685911522291216
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5015314939444103,
+      "brier": 0.16732247568738187
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5070009006417473,
+      "brier": 0.1691530811784678
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5033217484740998,
+      "brier": 0.16774404434973533
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.504554709015865,
+      "brier": 0.16807590606914724
+    },
+    {
+      "k": 35.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5106592926998299,
+      "brier": 0.16997044215760032
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5096263373488967,
+      "brier": 0.16952910463349996
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5105495370773352,
+      "brier": 0.17012875859874446
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5135402915544459,
+      "brier": 0.1714532154128087
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5011351823881028,
+      "brier": 0.16723591399154422
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5025475449078315,
+      "brier": 0.1677804363967001
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5069541816317711,
+      "brier": 0.16940215789609203
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.4999952552723001,
+      "brier": 0.16684141204158182
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5013499551000705,
+      "brier": 0.16726804086179706
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5066004694953262,
+      "brier": 0.16902179643393264
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5033346275708546,
+      "brier": 0.16777052143486174
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.50434101574072,
+      "brier": 0.16806686411517163
+    },
+    {
+      "k": 35.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5101487972508014,
+      "brier": 0.1698574727838458
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.516928962859272,
+      "brier": 0.17170273219913856
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5177963348029145,
+      "brier": 0.17234759203159883
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5202592489202023,
+      "brier": 0.17352111544538473
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5063887295693278,
+      "brier": 0.1690721861809966
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5079450023476925,
+      "brier": 0.16975276887560645
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5119299713368786,
+      "brier": 0.17131980058407642
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5032640000648381,
+      "brier": 0.16820863392929092
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5050067003886148,
+      "brier": 0.1688099862159552
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5101248495977384,
+      "brier": 0.17063603491341375
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5044878104490877,
+      "brier": 0.168534242870742
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5060958259981408,
+      "brier": 0.16900091692246685
+    },
+    {
+      "k": 45.0,
+      "home_field": 45.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.512156251744066,
+      "brier": 0.17099903659428145
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5161994781166035,
+      "brier": 0.17131107976286525
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5169850360702636,
+      "brier": 0.1719339015719702
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5193836282753042,
+      "brier": 0.17308939196406664
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5056841351961795,
+      "brier": 0.16872889535550703
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5071090390038453,
+      "brier": 0.16937357423981705
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5109722343153762,
+      "brier": 0.17089835797561986
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5025623247025227,
+      "brier": 0.16789646316991896
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.504126718123444,
+      "brier": 0.16845354307410676
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5090558910903022,
+      "brier": 0.17020945946590285
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5037788350921246,
+      "brier": 0.16824181174900862
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.505163697233425,
+      "brier": 0.16866146271857566
+    },
+    {
+      "k": 45.0,
+      "home_field": 55.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5109536074545055,
+      "brier": 0.17055750100424769
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5160818974794117,
+      "brier": 0.17110925559734738
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5167900173365304,
+      "brier": 0.171714983805895
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.0,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5191277979782022,
+      "brier": 0.1728562101179949
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5055934634133277,
+      "brier": 0.16859653697645616
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5068930226021966,
+      "brier": 0.16921154207161615
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.1,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5106392213301637,
+      "brier": 0.17069915111769374
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5024832883217921,
+      "brier": 0.16781398906579742
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5038774028432049,
+      "brier": 0.16833409025898322
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.2,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5086239780943168,
+      "brier": 0.170026455961444
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1000.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5037078174505691,
+      "brier": 0.16820104458500648
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1150.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5048799099161165,
+      "brier": 0.16858164763920286
+    },
+    {
+      "k": 45.0,
+      "home_field": 65.0,
+      "season_regression": 0.33,
+      "fcs_rating": 1300.0,
+      "mov_multiplier": true,
+      "n_games": 7876,
+      "log_loss": 0.5104080172174121,
+      "brier": 0.1703842769007571
+    }
+  ]
+}

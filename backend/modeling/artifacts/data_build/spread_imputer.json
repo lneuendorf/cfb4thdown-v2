@@ -1,0 +1,8 @@
+{
+  "formula": "home_spread = intercept + elo_diff * (home_elo - away_elo) + home * home_field",
+  "intercept": -0.49792392944804265,
+  "elo_diff": -0.05265062989408499,
+  "home_field": -2.8946877271721907,
+  "n": 11125,
+  "mae": 5.148761598899387
+}

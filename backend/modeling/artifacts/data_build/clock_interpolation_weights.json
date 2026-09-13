@@ -1,0 +1,36 @@
+{
+  "fit_seasons": [
+    2024,
+    2025
+  ],
+  "median_seconds_to_next_play": {
+    "Blocked Field Goal": 6.0,
+    "Blocked Field Goal Touchdown": 0.5,
+    "Blocked Punt": 8.0,
+    "Blocked Punt Touchdown": 7.0,
+    "Field Goal Good": 8.0,
+    "Field Goal Missed": 7.0,
+    "Fumble": 20.0,
+    "Fumble Recovery (Opponent)": 8.0,
+    "Fumble Recovery (Own)": 19.0,
+    "Fumble Return Touchdown": 8.5,
+    "Interception": 8.0,
+    "Interception Return Touchdown": 7.0,
+    "Missed Field Goal Return": 8.0,
+    "Pass Completion": 25.0,
+    "Pass Incompletion": 7.0,
+    "Pass Interception Return": 8.0,
+    "Pass Reception": 29.0,
+    "Passing Touchdown": 8.0,
+    "Penalty": 13.0,
+    "Punt": 8.0,
+    "Punt Return": 7.5,
+    "Punt Return Touchdown": 7.0,
+    "Rush": 35.0,
+    "Rushing Touchdown": 8.0,
+    "Sack": 36.0,
+    "Safety": 12.0,
+    "Uncategorized": 0.0,
+    "default": 24.0
+  }
+}

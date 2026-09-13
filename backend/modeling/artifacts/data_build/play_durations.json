@@ -1,0 +1,18 @@
+{
+  "fit_seasons": [
+    2025
+  ],
+  "median_seconds": {
+    "field_goal": 2.0,
+    "fumble": 7.0,
+    "kneel": 3.0,
+    "non_state": 0.0,
+    "pass": 6.0,
+    "penalty": 0.0,
+    "punt": 6.0,
+    "rush": 5.0,
+    "safety": 5.0,
+    "spike": 0.0,
+    "default": 5.0
+  }
+}
