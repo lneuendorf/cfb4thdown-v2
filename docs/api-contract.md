@@ -2,7 +2,11 @@
 
 Base: `/api/v1`. JSON only. No authentication. Interactive docs at `/api/v1/docs`.
 
-Implemented in `backend/app/api/` (Phase 2): `/scoreboard/latest`, `/scoreboard/week`, `/games`, `/games/:id`, `/teams`, `/ticker`, `/health`. The rest of this document is specified but not built yet.
+Implemented in `backend/app/api/`:
+- Phase 2: `/scoreboard/latest`, `/scoreboard/week`, `/games`, `/games/:id`, `/teams`, `/ticker`, `/health`.
+- Phase 3: `/punt-index`, `/punt-index/:subject/:id`, `/week-in-review/:season/:week`, `/week-in-review/latest`.
+
+`/scoreboard/live` and the simulator are specified but not built yet.
 
 Every endpoint is served from cache. A user request never triggers an upstream call to CollegeFootballData — if the cache is cold, return what we have with a stale marker rather than blocking.
 
@@ -272,59 +276,87 @@ Index for the games list. Without `season` and `week`, returns the latest week w
 
 ## Week in review
 
-### `GET /week-in-review/:season/:week`
+Computed on request from stored grades (`backend/app/api/aggregates.py`), so totals always equal the sum of their games and a regrade updates them immediately. Scope is **FBS offenses** (`scope: "fbs_offenses"`), so counts are lower than `/scoreboard/week`, which includes every graded offense.
+
+### `GET /week-in-review/:season/:week?season_type=regular`
+### `GET /week-in-review/latest` — the most recent week whose games are all final.
 
 ```json
 {
   "data": {
-    "season": 2026, "week": 3,
+    "season": 2026, "week": 2, "season_type": "regular",
     "is_complete": true,
-    "wp_lost_total": 1.84,
-    "fourth_downs_total": 412,
-    "followed_model_rate": 0.61,
+    "scope": "fbs_offenses",
+    "games_total": 86, "games_graded": 82,
+    "wp_lost_total": 3.7318,
+    "wp_lost_per_game": 0.0455,
+    "fourth_downs_total": 856,
+    "mistakes": 9,
+    "followed_model_rate": 0.56,
     "worst_call": { /* Decision */ },
     "best_call": { /* Decision */ },
     "by_conference": [
-      { "conference": "Big Ten", "wp_lost": 0.31, "fourth_downs": 58, "followed_model_rate": 0.58 }
+      { "conference": "American Athletic", "wp_lost": 0.5353, "fourth_downs": 96, "games": 11,
+        "wp_lost_per_game": 0.0487, "followed_model_rate": 0.5625 }
     ],
     "punt_index_movers": [
-      { "coach_id": "...", "coach_name": "Barry Odom", "team": { }, "change": 0.042, "rank_now": 1, "rank_before": 4 }
+      { "coach_id": "1234", "coach_name": "Fake Coach", "team": { }, "value": 0.042, "rank_now": 1, "rank_before": 4 }
     ],
     "commentary": null
   }
 }
 ```
 
-`is_complete` is false while games in the week are still unplayed. The page should render partial with a note rather than 404.
+- `worst_call`: the decision with the most negative `wp_delta`; `null` if every call matched.
+- `best_call`: a call that matched the recommendation, preferring go-for-it decisions, with the largest `margin`.
+- `by_conference`: the offense's conference that season, sorted by `wp_lost_per_game` (highest first).
+- `punt_index_movers`: coaches whose season-to-date Punt Index rank (WP lost, regular season, at least 3 games) changed most from the previous week. `value` is their WP lost per game now. Empty in week 1, early in a season, and in the postseason.
+- `commentary`: optional plain text (paragraphs separated by blank lines), set with `jobs.commentary`. `null` is normal.
 
-`commentary` is an optional markdown string, manually added. Null is normal.
+`is_complete` is false while games in the week are still unplayed. The page renders partial with a note rather than 404.
 
-**Cache:** 24h once complete, 1h while in progress.
+**Cache:** 5 min / 1h CDN once complete, 30s / 60s CDN while in progress.
 
 ---
 
 ## The Punt Index
 
-### `GET /punt-index?subject=coach&metric=wp_lost&season_from=&season_to=&conference=&min_games=`
+### `GET /punt-index?subject=coach&metric=wp_lost&season_from=&season_to=&conference=&min_games=6&returning=false`
 
-`subject`: `coach` | `team`. `metric`: `wp_lost` | `go_rate`.
+- `subject`: `coach` | `team`. `metric`: `wp_lost` | `go_rate`.
+- `season_to` defaults to the latest season in which some team has `min_games` graded games, and `season_from` defaults to `season_to`.
+- `conference` filters on the team's conference in each season.
+- `returning=true` (coaches only) keeps coaches with a segment in the current season.
+
+Definitions (FBS offenses only):
+- `wp_lost`: conservative WP lost per game. It sums `-wp_delta` over fourth downs where the model recommended `go` and the team kicked or punted, divided by games with a graded fourth down. Ranked highest first.
+- `go_rate`: `went_for_it / go_recommendations`. Ranked lowest first.
+- Coach credit follows `coach_team_seasons` (`jobs.coaches`). Fourth downs from team-seasons that can't be split reliably are unattributed: counted for teams, not coaches, and reported in `unattributed_fourth_downs`.
 
 ```json
 {
   "data": {
     "subject": "coach",
     "metric": "wp_lost",
-    "season_from": 2026, "season_to": 2026,
+    "season_from": 2025, "season_to": 2025,
+    "conference": null,
     "min_games": 6,
+    "returning": false,
+    "conferences": ["ACC", "American Athletic"],
+    "unattributed_fourth_downs": 0,
     "rows": [
       {
         "rank": 1,
-        "id": "odom-barry",
-        "name": "Barry Odom",
-        "team": { /* team */ },
-        "value": 0.320,
-        "games": 12,
-        "fourth_downs": 41,
+        "id": "1234",
+        "name": "Fake Coach",
+        "team": { /* team: the most recent team in the range */ },
+        "value": 0.0711,
+        "games": 9,
+        "fourth_downs": 104,
+        "go_recommendations": 51,
+        "went_for_it": 14,
+        "wp_lost_total": 0.64,
+        "seasons": [2025],
         "sample_warning": false
       }
     ]
@@ -332,13 +364,31 @@ Index for the games list. Without `season` and `week`, returns the latest week w
 }
 ```
 
-`sample_warning` is true below `min_games`. Rows below the threshold are still returned so they can be shown greyed out — silently dropping them makes the ranking look wrong to anyone checking for their own team.
+`id` is the CFBD coach id or team id, as a string.
 
-**Cache:** 12h.
+`sample_warning` is true below `min_games`; those rows have `rank: null` and come after the ranked rows. Rows below the threshold are still returned so they can be shown greyed out. Silently dropping them makes the ranking look wrong to anyone checking for their own team.
+
+**Cache:** 5 min / 1h CDN.
 
 ### `GET /punt-index/:subject/:id`
 
-Season-by-season trend for one coach or team.
+Season-by-season rows for one coach or team:
+
+```json
+{
+  "data": {
+    "subject": "coach", "id": "1234", "name": "Fake Coach",
+    "interim_seasons": [2021],
+    "seasons": [
+      { "season": 2025, "team": { }, "games": 9, "fourth_downs": 104, "go_recommendations": 51,
+        "went_for_it": 14, "go_rate": 0.2745, "wp_lost": 0.0711, "wp_lost_total": 0.64,
+        "rank": 1, "ranked_of": 126 }
+    ]
+  }
+}
+```
+
+`rank` is by WP lost per game that season, among subjects with at least 6 graded games. `interim_seasons` lists seasons the coach took over mid-season.
 
 ---
 

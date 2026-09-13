@@ -70,9 +70,13 @@ Fetches ESPN's scoreboard for `GET /ticker` and holds it in memory. It is score-
 
 It exists as a CLI (`jobs.live_poll --loop`) but isn't scheduled yet. When live grading ships (`docs/roadmap.md` Phase 6), it joins the scheduler as a third loop, active only while games are live.
 
-### `week-in-review`: Phase 3
+### `coaches`: Mondays at 09:00 UTC, after `teams`
 
-Planned for Tuesdays at 06:00 CT, after the reprocessing window has caught most corrections. It skips a week that isn't complete.
+Rebuilds coach attribution from CFBD `/coaches` (one call; `jobs/coaches.py`). It also runs on the first hourly check if no attribution exists yet, e.g. on a freshly seeded server.
+
+### Week in Review and the Punt Index: no job
+
+Both are computed on request from stored grades (`app/api/aggregates.py`). There is no Tuesday job; a week becomes the latest Week in Review as soon as all its games are final. Commentary is set by hand with `jobs.commentary`.
 
 ### `backfill`: manual only
 
@@ -87,6 +91,7 @@ It regrades history from processed data after a model change, never on a schedul
 | CFBD (Tier 1: 5,000 calls/month) | `process` | 2 calls + 1 per affected week, + 4 when snapshots are missing |
 | | `pregame_snapshot` | 6 per run |
 | | `teams` | 1 per week |
+| | `coaches` | 1 per week |
 | ESPN (undocumented, no key) | `game_check` | 24 requests/day |
 | | ticker | 120 requests/hour while games are live |
 

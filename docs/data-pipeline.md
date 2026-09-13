@@ -130,6 +130,13 @@ This is the messiest part of the system. Coaches change mid-season, interim coac
 - Interim stretches are attributed to the interim, flagged `is_interim`.
 - When attribution is genuinely unknown, record it as unattributed rather than guessing. **Never guess a coach.**
 
+**As built** (`backend/jobs/coaches.py`): CFBD `/coaches` has per-team-season game counts and each coach's latest hire date, but no change dates.
+- **One coach listed:** the whole team-season is theirs.
+- **Several coaches:** games are split in kickoff order, coaches ordered by hire date, only when the counts sum to the team's final games, the first coach was hired before August 1, and each later coach was hired by their first game (plus 3 days). Later coaches are flagged `is_interim` ("took over mid-season").
+- **Otherwise:** the team-season is unattributed, with its reason in `coach_attribution_issues`.
+
+Aggregates are computed on request rather than stored (`backend/app/api/aggregates.py`), so `team_seasons`, `coach_seasons` and `weeks` tables aren't needed.
+
 ---
 
 ## Storage

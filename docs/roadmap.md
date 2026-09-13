@@ -4,14 +4,14 @@ The build order for cfb4thdown: what each phase delivers, what's done, and what 
 
 Pages and their jobs are in `docs/sitemap.md`. Deferred ideas that aren't scheduled into a phase are in `docs/future-improvements.md`.
 
-**Status as of 2026-09-13**
+**Status as of 2026-09-13** (Phases 1–2 deployed: Railway API, Vercel site)
 
 | Phase | Name | Status |
 |---|---|---|
 | 0 | Scaffolding and specification | Done |
-| 1 | Spine (design system, static Methodology) | Built; not deployed |
-| 2 | Data served (API, jobs, game page, weekly scoreboard) | Built and running locally; not deployed; OG images not built |
-| 3 | Derived (Punt Index, Week in Review) | Not started; blocked on review gate |
+| 1 | Spine (design system, static Methodology) | Deployed |
+| 2 | Data served (API, jobs, game page, weekly scoreboard) | Deployed; OG images not built |
+| 3 | Derived (Punt Index, Week in Review) | Built; pages carry an "under review" notice until the review gate passes |
 | 4 | Simulator | Not started; option evaluator exists |
 | 5 | Backfill 2013–2025 | Done early (in-sample grades) |
 | 6 | Live grading (pending-decision card) | Prototype built and replay-tested; not in production |
@@ -153,24 +153,46 @@ The grading layer recommends going for it on 58% of fourth downs; coaches go on 
 
 Phase 2 pages can go live before the gate if every grade is labeled as model output and there are no league-wide rankings.
 
-## Phase 3 — Derived · Not started
+## Phase 3 — Derived · Built (under review)
 
 **Goal:** the named metric and the weekly habit.
 
-**Scope**
-- **Coach attribution:** team-season based, with mid-season splits and interim coaches flagged. Unattributed is a valid value. Nothing from v1 is reusable.
-- **Aggregates:**
-  - team-season and coach-season: go rate when recommended, WP lost, fourth downs faced;
-  - week totals, best and worst calls, conference breakdown.
-- **Punt Index** page and API, with sample-size warnings and deep-linkable filters.
-- **Week in Review** page and API, and the Tuesday job (the timing conflict with the 7-day reprocessing window is still open in `automation.md`).
+**Built (2026-09-13)**
+- **Coach attribution** (`jobs.coaches`, one CFBD call, weekly in the scheduler):
+  - team-season based, from CFBD `/coaches`;
+  - mid-season changes split only when game counts sum and hire dates fit the schedule, and coaches who took over mid-season are flagged;
+  - otherwise the team-season is unattributed, with a reason in `coach_attribution_issues`;
+  - result: 1,691 sole-coach team-seasons, 185 split segments, 45 unattributed team-seasons (2013–2026).
+- **Aggregates computed on request** (`app/api/aggregates.py`):
+  - no materialized tables, so rankings reproduce from stored grades;
+  - week totals are sums of their games by construction;
+  - a model version bump changes every aggregate at once.
+  - This replaces the planned Tuesday `week-in-review` job.
+- **Punt Index API and page:**
+  - coaches or teams, WP lost per game or go rate, season range, conference, current coaches only;
+  - URL-encoded filters, and small samples shown greyed and unranked;
+  - a detail page with a season table.
+- **Week in Review API and page** (`/week`, `/week/:season/:week`):
+  - headline WP lost per game, worst and best call, conference bars, Punt Index movers;
+  - optional commentary (`jobs.commentary`), and every fourth down behind "show all".
+- **Methodology:** a Punt Index section with the definitions and the attribution rule.
+- **Tests:** 7 new backend tests (attribution rules, Punt Index, Week in Review) and 1 frontend test.
 
-**Depends on:** Phase 2 and the review gate.
+**Decisions made here**
+- `wp_lost` is **per game**, not a season total, so ranges and shortened seasons compare fairly.
+- The Week in Review headline is **WP lost per game**. A league-wide sum of WP percentages (for example −373%) doesn't read as a number; the total stays in the API.
+- Week in Review and the Punt Index cover FBS offenses only.
+
+**Still gated:** the review gate below. Every ranking page shows an "under review" notice until it passes.
+
+**Not done**
+- Conference and top-25 filters on the home feed (top-25 needs a rankings source).
+- A trend chart on the detail page; the season table carries the trend.
 
 **Exit criteria**
-- Rankings reproduce from stored grades.
-- Week totals equal the sum of their games.
-- A model version bump regenerates every aggregate.
+- Rankings reproduce from stored grades. *(By construction.)*
+- Week totals equal the sum of their games. *(By construction.)*
+- A model version bump regenerates every aggregate. *(By construction.)*
 
 ## Phase 4 — Simulator · Not started
 
