@@ -12,7 +12,7 @@ Pages and their jobs are in `docs/sitemap.md`. Deferred ideas that aren't schedu
 | 1 | Spine (design system, static Methodology) | Deployed |
 | 2 | Data served (API, jobs, game page, weekly scoreboard) | Deployed; OG images not built |
 | 3 | Derived (Punt Index, Week in Review) | Built; pages carry an "under review" notice until the review gate passes |
-| 4 | Simulator | Not started; option evaluator exists |
+| 4 | Simulator | Built |
 | 5 | Backfill 2013–2025 | Done early (in-sample grades) |
 | 6 | Live grading (pending-decision card) | Prototype built and replay-tested; not in production |
 | 7 | Model improvements | Planned |
@@ -194,20 +194,33 @@ Phase 2 pages can go live before the gate if every grade is labeled as model out
 - Week totals equal the sum of their games. *(By construction.)*
 - A model version bump regenerates every aggregate. *(By construction.)*
 
-## Phase 4 — Simulator · Not started
+## Phase 4 — Simulator · Built
 
 **Goal:** make the model something people can play with.
 
-**Already available:** `modeling/options.py` evaluates any state.
+**Built (2026-09-13)**
+- **`GET /simulate`** (`app/api/simulate.py`):
+  - runs the grading option evaluator (about 70 ms warm), memoized per model version, and is CDN-cacheable;
+  - validates inputs and returns contract-shaped 400s.
+- **Decision: server endpoint, not a precomputed table.** About 25 model inputs make a full table impractical, and a reduced one would silently fix team strength, timeouts and weather.
+- **Defaults for unexposed inputs:**
+  - team strength is one spread slider, mapped to both Elo ratings by inverting the spread imputer around the FBS base rating;
+  - weather and elevation are the training medians, outdoors, at the latest model season;
+  - timeouts default to 3 each and can be changed.
+  - All defaults are echoed in the response.
+- **Similar situations:** graded FBS fourth downs since 2013 with the same distance band, yards to goal ±5, score band and quarter. It reports what coaches did, what the model said, and the 5 most recent examples linking to their plays.
+- **Page `/simulator`:**
+  - every input in the URL, and opens on 4th & 2 at the opponent 40, down 4 with 6:00 left;
+  - result panel with option bars ("not an option" for infeasible ones), confidence and margin, conversion and FG odds, and the punt's expected start;
+  - a pinned result bar on phones, and copy link.
+- **Tests:** 3 backend and 1 frontend.
 
-**Scope**
-- Define defaults for the inputs the page doesn't expose: timeouts, spread, Elo, weather, venue. Map "team quality" to a documented composite (`v1-audit.md` C9).
-- `/simulate`, cached by model version.
-- Decide between a server endpoint and a precomputed table. About 25 model inputs makes a full table impractical, so a reduced table would fix team and weather at league average.
-- "Similar situations" history from `plays_fourth_down`.
-- URL-encoded state.
+**Decisions made here**
+- **Both scores instead of a score differential.** The WP model uses each score, not only the difference.
+- **One spread slider instead of separate offense and defense ratings.** One number keeps all four models consistent.
 
-**Depends on:** the Phase 2 API. It doesn't need Phase 3.
+**Not done**
+- `conversion_rate` in similar situations. Conversion outcomes aren't stored with grades yet; that needs a small backfill column.
 
 ## Phase 5 — Backfill · Done early
 

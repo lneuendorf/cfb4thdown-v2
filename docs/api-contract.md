@@ -6,7 +6,9 @@ Implemented in `backend/app/api/`:
 - Phase 2: `/scoreboard/latest`, `/scoreboard/week`, `/games`, `/games/:id`, `/teams`, `/ticker`, `/health`.
 - Phase 3: `/punt-index`, `/punt-index/:subject/:id`, `/week-in-review/:season/:week`, `/week-in-review/latest`.
 
-`/scoreboard/live` and the simulator are specified but not built yet.
+- Phase 4: `/simulate`.
+
+`/scoreboard/live` is specified but not built yet (Phase 6).
 
 Every endpoint is served from cache. A user request never triggers an upstream call to CollegeFootballData — if the cache is cold, return what we have with a stale marker rather than blocking.
 
@@ -394,33 +396,55 @@ Season-by-season rows for one coach or team:
 
 ## Simulator
 
-### `GET /simulate?down=4&distance=&yards_to_goal=&score_diff=&period=&clock=&offense_rating=&defense_rating=`
+### `GET /simulate?distance=&yards_to_goal=&period=&clock=&offense_score=&defense_score=&offense_timeouts=3&defense_timeouts=3&spread=0&home=neutral`
+
+Runs the grading option evaluator on one state, about 70 ms warm, memoized per model version (`backend/app/api/simulate.py`). There's no precomputed table: the models take about 25 inputs, and a table would have to fix most of them.
+
+| Param | Range | Notes |
+|---|---|---|
+| `distance` | 1–99 | ≤ `yards_to_goal` (equal means 4th & goal) |
+| `yards_to_goal` | 1–99 | from the offense's perspective |
+| `period` | 1–4 | overtime isn't modeled |
+| `clock` | `M:SS`, 0:00–15:00 | clock left in the period |
+| `offense_score`, `defense_score` | 0–150 | both, not a differential: the WP model uses each score |
+| `offense_timeouts`, `defense_timeouts` | 0–3 | default 3 |
+| `spread` | −50–50 | offense's point spread, negative = favored; rounded to 0.5 |
+| `home` | `home` \| `away` \| `neutral` | default `neutral` |
+
+`spread` replaces the earlier `offense_rating`/`defense_rating`. It's mapped to both Elo ratings by inverting the spread imputer around the FBS base rating, so one number carries team strength consistently for all four models. Weather, elevation and indoors use the documented defaults, which are echoed in `defaults`.
 
 ```json
 {
   "data": {
     "recommendation": "go",
     "confidence": "clear",
-    "wp_go": 0.412,
-    "wp_punt": 0.318,
-    "wp_field_goal": 0.301,
-    "margin": 0.094,
+    "margin": 0.0716,
+    "wp_go": 0.3333, "wp_field_goal": 0.2618, "wp_punt": 0.247,
+    "p_convert": 0.5666, "p_fg_make": 0.4486, "punt_opponent_yards_to_goal": 87.6,
+    "inputs": { "distance": 2, "yards_to_goal": 40, "offense_score": 17, "defense_score": 21, "period": 4,
+                "clock_seconds": 360, "offense_timeouts": 3, "defense_timeouts": 3, "spread": 0.0,
+                "home": "neutral", "offense_elo": 1495.3, "defense_elo": 1504.7 },
+    "defaults": { "fbs_base_elo": 1500.0, "temperature": 68.4, "wind_speed": 7.0, "precipitation": 0.0,
+                  "elevation_m": 185.4, "indoors": false, "season": 2026 },
+    "model_versions": { "win_probability": "2.0.0" },
     "historical": {
-      "similar_situations": 47,
-      "went_for_it": 0.22,
-      "conversion_rate": 0.58
+      "similar_situations": 41,
+      "went_for_it": 0.9512, "punted": 0.0488, "kicked_field_goal": 0.0, "model_said_go": 0.9756,
+      "conversion_rate": null,
+      "criteria": { "distance": [2, 2], "yards_to_goal": [35, 45], "score_diff": [-8, -4], "period": 4,
+                    "scope": "FBS offenses, 2013 on" },
+      "examples": [ /* up to 5 Decision objects, most recent first */ ]
     }
-  }
+  },
+  "meta": { "generated_at": "...", "stale": false, "source": "model" }
 }
 ```
 
-`confidence`: `"clear"` (margin ≥ 0.05), `"close"` (0.02-0.05), `"toss_up"` (< 0.02), `"only_option"`. Infeasible options are `null`, as in the Decision object.
+- `confidence`: `"clear"` (margin ≥ 0.05), `"close"` (0.02–0.05), `"toss_up"` (< 0.02) or `"only_option"`. Infeasible options are `null`, as in the Decision object.
+- `historical`: graded fourth downs with the same distance (±1 from 4–9, 10+ pooled), yards to goal ±5, the same score band (tied, 1–3, 4–8, 9+ either way) and the same quarter. It describes what coaches did and isn't a model input. `conversion_rate` stays `null` until conversion outcomes are stored with grades.
+- Errors: `400 BAD_PARAMS` for out-of-range values, a malformed clock, or `distance` > `yards_to_goal`.
 
-**Cache:** indefinitely — same inputs always give the same answer for a given model version. Key the cache on model version so a retrain invalidates it.
-
-### `GET /simulate/table`
-
-Precomputed lookup covering the common input space, for client-side evaluation. Gzipped JSON, versioned filename, cached forever by the CDN. If this ships, the simulator page never calls `/simulate` at all.
+**Cache:** `public, max-age=3600, s-maxage=86400`; the same inputs and model version always give the same answer.
 
 ---
 

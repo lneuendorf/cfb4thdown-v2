@@ -30,12 +30,12 @@ flowchart TB
       ticker["ticker · 30 s live"]
     end
     grading["app.batch + app.grading<br/>shared grading code"]
-    api["FastAPI · /api/v1<br/>scoreboard · games · punt index · week in review · teams · ticker · health"]
+    api["FastAPI · /api/v1<br/>scoreboard · games · punt index · week in review · simulate · teams · ticker · health"]
     db[("SQLite on /data volume<br/>games · plays_fourth_down · wp_series<br/>game_sources · pregame_snapshots · teams · run_log")]
   end
 
   subgraph vercel["Vercel"]
-    web["React + Vite site<br/>home · game · games · punt index · week in review · methodology"]
+    web["React + Vite site<br/>home · game · games · punt index · week in review · simulator · methodology"]
   end
 
   cfbd --> raw --> build --> train --> artifacts
@@ -104,7 +104,7 @@ cd backend && uv sync
 
 ## Status
 
-Phases 0–3 are built: models, grading, the 2013–2025 backfill, current-season processing, the API, scheduled jobs, and the home, game, games, Punt Index and Week in Review pages. The API runs on Railway and the site on Vercel (`docs/deploy.md`). See `docs/roadmap.md`.
+Phases 0–4 are built: models, grading, the 2013–2025 backfill, current-season processing, the API, scheduled jobs, and the home, game, games, Punt Index, Week in Review and simulator pages. The API runs on Railway and the site on Vercel (`docs/deploy.md`). See `docs/roadmap.md`.
 
 ## Run it locally
 
