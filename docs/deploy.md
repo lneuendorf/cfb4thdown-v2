@@ -8,7 +8,7 @@ flowchart LR
   gh["GitHub repo"] -- "deploy on push" --> api["Railway service<br/>backend/Dockerfile"]
   gh -- "deploy on push" --> web["Vercel project<br/>frontend/"]
   api --- vol
-  web -- "VITE_API_BASE" --> api
+  web -- "/api proxy (vercel.json)" --> api
 ```
 
 ---
@@ -130,23 +130,21 @@ curl -s https://<railway-domain>/api/v1/health
 
 ## 6. Create the Vercel project
 
+The site calls `/api/...` on its own domain, and `frontend/vercel.json` forwards those requests to Railway. The browser only ever talks to one domain, so there's no CORS setup, and preview deployments work too.
+
 1. Vercel dashboard → **Add new project** → import `cfb4thdown-v2`.
-2. **Root directory:** `frontend`. The framework preset (Vite) and `frontend/vercel.json` handle the build and SPA rewrites.
-3. **Environment variables** (Production and Preview): `VITE_API_BASE` = `https://<railway-domain>`. No trailing slash.
-4. **Deploy**, then note the domain, e.g. `cfb4thdown.vercel.app`.
-5. Back in Railway, set `CORS_ORIGINS` = `https://cfb4thdown.vercel.app`. Comma-separate extra origins, such as your custom domain.
+2. **Root directory:** `frontend`. The framework preset (Vite) and `frontend/vercel.json` handle the build, the API proxy and SPA rewrites.
+3. **Environment variables:** none. Don't set `VITE_API_BASE`, and never add `CFBD_API_KEY` to Vercel.
+4. **Deploy.** Production is `https://cfb4thdown-v2.vercel.app`.
+5. Check `https://cfb4thdown-v2.vercel.app/api/v1/health`. It should return the API's JSON.
 
-Preview deployments get their own URLs, which aren't in `CORS_ORIGINS`, so their API calls fail. To make previews work, either add each preview origin, or proxy instead of using CORS. For the proxy, drop `VITE_API_BASE` and add this rewrite **before** the SPA rewrite in `frontend/vercel.json`:
-
-```json
-{ "source": "/api/:path*", "destination": "https://<railway-domain>/api/:path*" }
-```
+If the Railway domain changes, update the `destination` in `frontend/vercel.json`. `CORS_ORIGINS` on Railway can stay empty; it's only needed if you switch to calling the API directly with `VITE_API_BASE`.
 
 ## 7. Custom domains (optional)
 
 - **Vercel:** Project → Domains → add `cfb4thdown.com` and follow the DNS instructions.
 - **Railway:** Service → Networking → Custom domain → `api.cfb4thdown.com` (CNAME).
-- **Then:** update `VITE_API_BASE` (and redeploy Vercel) and `CORS_ORIGINS`.
+- **Then:** update the API `destination` in `frontend/vercel.json` if the API domain changed.
 
 ## 8. Monitoring
 
