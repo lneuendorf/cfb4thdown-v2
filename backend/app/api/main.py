@@ -26,7 +26,7 @@ from fastapi.responses import JSONResponse
 
 from app import db
 from app import decisions as pipeline
-from app.api import aggregates, store
+from app.api import aggregates, simulate, store
 from app.scheduler import Scheduler, TickerCache
 
 SeasonType = Literal["regular", "postseason"]
@@ -258,6 +258,39 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
             raise ApiError(404, "WEEK_NOT_FOUND", "No games in that week.")
         response.headers["Cache-Control"] = CACHE_WEEK if data["is_complete"] else CACHE_SHORT
         return envelope(data, conn)
+
+    @app.get(f"{v1}/simulate")
+    def simulate_decision(
+        conn: Conn,
+        response: Response,
+        distance: Annotated[int, Query(ge=1, le=99)],
+        yards_to_goal: Annotated[int, Query(ge=1, le=99)],
+        period: Annotated[int, Query(ge=1, le=4)],
+        clock: Annotated[str, Query(pattern=r"^\d{1,2}:\d{2}$")],
+        offense_score: Annotated[int, Query(ge=0, le=150)] = 0,
+        defense_score: Annotated[int, Query(ge=0, le=150)] = 0,
+        offense_timeouts: Annotated[int, Query(ge=0, le=3)] = 3,
+        defense_timeouts: Annotated[int, Query(ge=0, le=3)] = 3,
+        spread: Annotated[float, Query(ge=-50, le=50)] = 0.0,
+        home: Literal["home", "away", "neutral"] = "neutral",
+    ) -> dict:
+        minutes, seconds = (int(x) for x in clock.split(":"))
+        clock_seconds = minutes * 60 + seconds
+        if clock_seconds > 900 or seconds >= 60:
+            raise ApiError(400, "BAD_PARAMS", "clock must be between 0:00 and 15:00.")
+        if distance > yards_to_goal:
+            raise ApiError(400, "BAD_PARAMS", "distance can't be longer than yards_to_goal.")
+        inp = simulate.SimInput(
+            distance=distance, yards_to_goal=yards_to_goal, offense_score=offense_score,
+            defense_score=defense_score, period=period, clock_seconds=clock_seconds,
+            offense_timeouts=offense_timeouts, defense_timeouts=defense_timeouts,
+            spread=round(spread * 2) / 2, home=home,
+        )  # fmt: skip
+        data = simulate.evaluate(inp)
+        data["historical"] = simulate.similar(conn, inp)
+        # Same inputs and model version always give the same answer.
+        response.headers["Cache-Control"] = "public, max-age=3600, s-maxage=86400"
+        return envelope(data, None, source="model")
 
     @app.get(f"{v1}/ticker")
     def ticker_scores(response: Response) -> dict:

@@ -203,3 +203,39 @@ def test_week_in_review(client):
     assert data["commentary"] is None
     latest = client.get("/api/v1/week-in-review/latest").json()["data"]
     assert (latest["season"], latest["week"]) == (2099, 1)
+
+
+def test_simulate_returns_options_and_history(client):
+    r = client.get(
+        "/api/v1/simulate?distance=1&yards_to_goal=44&period=2&clock=11:11"
+        "&offense_score=11&defense_score=11"
+    )
+    assert r.status_code == 200
+    data = r.json()["data"]
+    assert data["recommendation"] in ("go", "punt", "field_goal")
+    assert data["confidence"] in ("clear", "close", "toss_up", "only_option")
+    assert 0 <= data["wp_go"] <= 1 and data["wp_field_goal"] is not None  # 44 yards: FG feasible
+    assert data["inputs"]["home"] == "neutral" and data["defaults"]["fbs_base_elo"] == 1500.0
+    history = data["historical"]
+    assert history["similar_situations"] == 1 and history["went_for_it"] == 1.0
+    assert history["examples"][0]["id"] == "1"
+
+
+def test_simulate_marks_infeasible_options_null(client):
+    data = client.get("/api/v1/simulate?distance=10&yards_to_goal=80&period=1&clock=15:00").json()[
+        "data"
+    ]
+    assert data["wp_field_goal"] is None  # beyond the FG model's range
+
+
+def test_simulate_validates_inputs(client):
+    bad = client.get("/api/v1/simulate?distance=12&yards_to_goal=5&period=1&clock=10:00")
+    assert bad.status_code == 400 and "distance" in bad.json()["error"]["message"]
+    assert (
+        client.get("/api/v1/simulate?distance=1&yards_to_goal=5&period=5&clock=1:00").status_code
+        == 400
+    )
+    assert (
+        client.get("/api/v1/simulate?distance=1&yards_to_goal=5&period=1&clock=16:00").status_code
+        == 400
+    )

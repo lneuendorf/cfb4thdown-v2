@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS plays_fourth_down (
 CREATE INDEX IF NOT EXISTS idx_p4_game ON plays_fourth_down(game_id);
 CREATE INDEX IF NOT EXISTS idx_p4_season ON plays_fourth_down(season, season_type, week);
 CREATE INDEX IF NOT EXISTS idx_p4_offense ON plays_fourth_down(offense_id, season);
+CREATE INDEX IF NOT EXISTS idx_p4_situation ON plays_fourth_down(period, distance, yards_to_goal);
 
 CREATE TABLE IF NOT EXISTS exclusions (
     play_id TEXT PRIMARY KEY,
