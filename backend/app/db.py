@@ -233,6 +233,22 @@ CREATE TABLE IF NOT EXISTS wp_series (
     home_wp REAL NOT NULL,
     PRIMARY KEY (game_id, seq)
 );
+-- Live (ESPN) fourth downs matched to their batch (CFBD) grade (app/reconcile.py).
+CREATE TABLE IF NOT EXISTS live_batch_links (
+    espn_play_id TEXT PRIMARY KEY,
+    cfbd_play_id TEXT,
+    game_id INTEGER NOT NULL,
+    clock_diff_seconds REAL,
+    live_decision TEXT,
+    batch_decision TEXT,
+    live_recommendation TEXT,
+    batch_recommendation TEXT,
+    recommendation_agrees INTEGER,
+    linked_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_links_game ON live_batch_links(game_id);
+CREATE INDEX IF NOT EXISTS idx_live_decisions_game ON live_decisions(game_id);
+
 -- Coach attribution (jobs/coaches.py). One row per coach segment of a team-season.
 CREATE TABLE IF NOT EXISTS coaches (
     coach_id INTEGER PRIMARY KEY,
@@ -323,6 +339,7 @@ PRIMARY_KEYS = {
     "venues": ("venue_id",),
     "game_sources": ("game_id",),
     "wp_series": ("game_id", "seq"),
+    "live_batch_links": ("espn_play_id",),
     "coaches": ("coach_id",),
     "coach_team_seasons": ("team_id", "season", "segment"),
     "coach_attribution_issues": ("team_id", "season"),

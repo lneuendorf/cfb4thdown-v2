@@ -29,7 +29,7 @@ from datetime import UTC, datetime, timedelta
 
 import pandas as pd
 
-from app import batch, db
+from app import batch, db, reconcile
 from app import decisions as pipeline
 from jobs import pregame_snapshot
 from modeling import options
@@ -222,7 +222,10 @@ def _grade(conn, season, season_games, games_ctx, rows_by_game, changed, known, 
         _set_source(conn, known, game_id, status, digest, n_rows, run_id)
         statuses[status] = statuses.get(status, 0) + 1
     conn.commit()
+    reconciliation = reconcile.reconcile(conn, ids)
+    conn.commit()
     return {
+        "reconciliation": reconciliation,
         "games_graded": len(changed),
         "build": stats.counts,
         "grading": grade_counts,
