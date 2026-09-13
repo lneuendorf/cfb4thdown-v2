@@ -178,3 +178,96 @@ export interface TickerFeed {
   games: TickerGame[];
   games_live: number;
 }
+
+// ---- Phase 3 endpoints ----
+
+export type PuntSubject = "coach" | "team";
+export type PuntMetric = "wp_lost" | "go_rate";
+
+export interface PuntIndexRow {
+  rank: number | null;
+  id: string;
+  name: string;
+  team: Team;
+  value: number;
+  games: number;
+  fourth_downs: number;
+  go_recommendations: number;
+  went_for_it: number;
+  wp_lost_total: number;
+  seasons: number[];
+  sample_warning: boolean;
+}
+
+export interface PuntIndex {
+  subject: PuntSubject;
+  metric: PuntMetric;
+  season_from: number;
+  season_to: number;
+  conference: string | null;
+  min_games: number;
+  returning: boolean;
+  conferences: string[];
+  rows: PuntIndexRow[];
+  unattributed_fourth_downs: number;
+}
+
+export interface PuntIndexSeason {
+  season: number;
+  team: Team;
+  games: number;
+  fourth_downs: number;
+  go_recommendations: number;
+  went_for_it: number;
+  go_rate: number | null;
+  wp_lost: number;
+  wp_lost_total: number;
+  rank: number | null;
+  ranked_of: number;
+}
+
+export interface PuntIndexDetail {
+  subject: PuntSubject;
+  id: string;
+  name: string;
+  seasons: PuntIndexSeason[];
+  interim_seasons: number[];
+}
+
+export interface ConferenceRow {
+  conference: string;
+  wp_lost: number;
+  fourth_downs: number;
+  games: number;
+  wp_lost_per_game: number;
+  followed_model_rate: number;
+}
+
+export interface PuntIndexMover {
+  coach_id: string;
+  coach_name: string;
+  team: Team;
+  value: number;
+  rank_now: number;
+  rank_before: number;
+}
+
+export interface WeekInReview {
+  season: number;
+  week: number;
+  season_type: SeasonType;
+  is_complete: boolean;
+  scope: string;
+  games_total: number;
+  games_graded: number;
+  wp_lost_total: number;
+  wp_lost_per_game: number | null;
+  fourth_downs_total: number;
+  mistakes: number;
+  followed_model_rate: number | null;
+  worst_call: Decision | null;
+  best_call: Decision | null;
+  by_conference: ConferenceRow[];
+  punt_index_movers: PuntIndexMover[];
+  commentary: string | null;
+}

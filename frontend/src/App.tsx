@@ -5,7 +5,10 @@ import { TickerBar } from "./components/TickerBar";
 import { GamesPage } from "./pages/GamesPage";
 import { HomePage } from "./pages/HomePage";
 import { Methodology } from "./pages/Methodology";
-import { NotFoundPage, PuntIndexPage, SimulatorPage, WeekPage } from "./pages/Placeholders";
+import { NotFoundPage, SimulatorPage } from "./pages/Placeholders";
+import { PuntIndexDetailPage } from "./pages/PuntIndexDetailPage";
+import { PuntIndexPage } from "./pages/PuntIndexPage";
+import { WeekInReviewPage } from "./pages/WeekInReviewPage";
 
 // The game page carries Recharts; load it on demand so other pages stay small.
 const GamePage = lazy(() => import("./pages/GamePage").then((m) => ({ default: m.GamePage })));
@@ -35,9 +38,10 @@ export function App() {
               </Suspense>
             }
           />
-          <Route path="week" element={<WeekPage />} />
-          <Route path="week/:season/:week" element={<WeekPage />} />
+          <Route path="week" element={<WeekInReviewPage />} />
+          <Route path="week/:season/:week" element={<WeekInReviewPage />} />
           <Route path="punt-index" element={<PuntIndexPage />} />
+          <Route path="punt-index/:subject/:id" element={<PuntIndexDetailPage />} />
           <Route path="simulator" element={<SimulatorPage />} />
           <Route path="methodology" element={<Methodology />} />
           {ComponentsPage && LivePreviewPage && (

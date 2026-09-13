@@ -2,8 +2,10 @@ import type { Team } from "../lib/types";
 import { TeamMark } from "./TeamMark";
 
 interface RankedRowProps {
-  rank: number;
-  team: Team;
+  /** null for unranked rows (below the minimum sample). */
+  rank: number | null;
+  /** Omitted for rows that aren't a team, e.g. a conference. */
+  team?: Team;
   name: string;
   value: string;
   /** Bar fill, 0–1, relative to the top row. */
@@ -30,16 +32,16 @@ export function RankedRow({
       className={`flex min-h-[40px] items-center gap-3 py-2 ${sampleWarning ? "opacity-50" : ""}`}
     >
       <span
-        className={`w-7 text-right font-mono text-delta ${rank <= 3 ? "text-bulb" : "text-muted"}`}
+        className={`w-7 text-right font-mono text-delta ${rank !== null && rank <= 3 ? "text-bulb" : "text-muted"}`}
       >
-        {rank}
+        {rank ?? "—"}
       </span>
-      <TeamMark team={team} size={30} />
+      {team && <TeamMark team={team} size={30} />}
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
           <span className="truncate text-team">{name}</span>
           {detail && (
-            <span className="truncate font-mono text-label text-muted">
+            <span className="truncate text-label text-muted">
               {detail}
             </span>
           )}

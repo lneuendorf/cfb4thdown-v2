@@ -21,24 +21,6 @@ function NotYet({ eyebrow, title, job, phase }: { eyebrow: string; title: string
   );
 }
 
-export const WeekPage = () => (
-  <NotYet
-    eyebrow="Week in review"
-    title="Week in review"
-    job="The week's worst and best calls, and win probability surrendered by conference."
-    phase="Phase 3"
-  />
-);
-
-export const PuntIndexPage = () => (
-  <NotYet
-    eyebrow="The Punt Index"
-    title="The Punt Index"
-    job="Coaches ranked by win probability surrendered through conservative fourth-down decisions."
-    phase="Phase 3"
-  />
-);
-
 export const SimulatorPage = () => (
   <NotYet
     eyebrow="Simulator"

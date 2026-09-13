@@ -18,6 +18,7 @@ const SECTIONS = [
   { id: "components", title: "The four models" },
   { id: "grading", title: "Grading a decision" },
   { id: "example", title: "A worked example" },
+  { id: "punt-index", title: "The Punt Index" },
   { id: "limitations", title: "What the model doesn't know" },
   { id: "data", title: "Data and updates" },
   { id: "issues", title: "Known issues" },
@@ -263,6 +264,41 @@ export function Methodology() {
           </li>
         </ol>
         <DecisionCard decision={EXAMPLE} />
+      </Section>
+
+      <Section id="punt-index" title="The Punt Index">
+        <p>
+          The Punt Index ranks FBS coaches and teams by the win probability they gave up by kicking or
+          punting when the model said go for it. It&rsquo;s measured per game, so a coach with more games
+          doesn&rsquo;t rank higher just for coaching more.
+        </p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            <strong className="font-medium">WP lost</strong> adds up the gap between going for it and what the coach
+            chose, on every fourth down where the model recommended going for it and the coach didn&rsquo;t. It&rsquo;s
+            divided by games played.
+          </li>
+          <li>
+            <strong className="font-medium">Go rate</strong> is the share of the model&rsquo;s go recommendations the team
+            actually went for.
+          </li>
+          <li>
+            Coaches and teams with fewer than <Mono>6</Mono> graded games in the selected seasons are shown greyed out
+            and aren&rsquo;t ranked.
+          </li>
+        </ul>
+        <p>
+          <strong className="font-medium">Which coach gets credit.</strong> Stats follow the coach of each team-season.
+          When a team changed coaches mid-season, the season is split at the change only if the records line up: the
+          coaches&rsquo; game counts add up to the team&rsquo;s games, and each new coach was hired before their first
+          game. Otherwise those fourth downs count for the team but aren&rsquo;t credited to any coach. We don&rsquo;t
+          guess.
+        </p>
+        <p>
+          <strong className="font-medium">Week in Review</strong> uses the same grades. The worst call is the fourth
+          down that cost the most win probability. The best call is the one where the coach followed the model and the
+          model&rsquo;s edge over the next option was largest.
+        </p>
       </Section>
 
       <Section id="limitations" title="What the model doesn't know">
