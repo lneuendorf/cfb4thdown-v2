@@ -1,0 +1,42 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--bg-field);
+  }
+  body {
+    @apply bg-field font-sans text-body text-text antialiased;
+    min-width: 320px;
+  }
+  /* Scoreboard numerals: fixed-width digits wherever mono is used. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 1px solid var(--bulb);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* The only animation the design spec permits: the ticker scroll during live games. */
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-ticker {
+    animation: ticker-scroll var(--ticker-duration, 60s) linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker { animation: none; }
+  }
+}
