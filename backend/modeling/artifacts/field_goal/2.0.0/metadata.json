@@ -1,0 +1,185 @@
+{
+  "description": "P(field goal made) from yards_to_goal (kick distance ~ ytg + 17).",
+  "method": "Probit on attempts. The Heckman selection correction was fit and estimated at ~0 on the validation seasons, so it is not used. The season trend extrapolates at most one season past training.",
+  "scope": "fourth downs with yards_to_goal <= 50; blocked kicks are misses",
+  "variants_valid": {
+    "heckman": {
+      "valid": {
+        "n": 4691,
+        "log_loss": 0.4920700719908977,
+        "brier": 0.16210153616718975,
+        "ece_20bin": 0.015487413193443192,
+        "base_rate": 0.7571946280110851
+      },
+      "mills_coef": 0.010384839755213683
+    },
+    "attempts_only": {
+      "valid": {
+        "n": 4691,
+        "log_loss": 0.49207321735585524,
+        "brier": 0.1621060523764232,
+        "ece_20bin": 0.01495965999415581,
+        "base_rate": 0.7571946280110851
+      },
+      "mills_coef": null
+    }
+  },
+  "seasons": {
+    "all": [
+      2013,
+      2025
+    ],
+    "valid": [
+      2022,
+      2023
+    ],
+    "test": [
+      2024,
+      2025
+    ]
+  },
+  "holdout_test": {
+    "overall": {
+      "n": 4932,
+      "log_loss": 0.4902048356528303,
+      "brier": 0.16075698355193077,
+      "ece_20bin": 0.021567259202633457,
+      "base_rate": 0.7696674776966748
+    },
+    "calibration": [
+      {
+        "bin": 3,
+        "pred": 0.3725,
+        "obs": 0.5,
+        "n": 16
+      },
+      {
+        "bin": 4,
+        "pred": 0.4645,
+        "obs": 0.4845,
+        "n": 258
+      },
+      {
+        "bin": 5,
+        "pred": 0.5535,
+        "obs": 0.6076,
+        "n": 660
+      },
+      {
+        "bin": 6,
+        "pred": 0.6514,
+        "obs": 0.6796,
+        "n": 902
+      },
+      {
+        "bin": 7,
+        "pred": 0.7515,
+        "obs": 0.7784,
+        "n": 952
+      },
+      {
+        "bin": 8,
+        "pred": 0.8539,
+        "obs": 0.8476,
+        "n": 1135
+      },
+      {
+        "bin": 9,
+        "pred": 0.9324,
+        "obs": 0.9376,
+        "n": 1009
+      }
+    ],
+    "by_kick_distance": {
+      "<30": {
+        "n": 1463,
+        "pred": 0.9161183557523879,
+        "obs": 0.9145591250854409
+      },
+      "30-39": {
+        "n": 1463,
+        "pred": 0.7928698112256628,
+        "obs": 0.8127136021872864
+      },
+      "40-49": {
+        "n": 1549,
+        "pred": 0.6320096583336668,
+        "obs": 0.6559070367979342
+      },
+      "50-54": {
+        "n": 383,
+        "pred": 0.5028273392177565,
+        "obs": 0.5587467362924282
+      },
+      "55+": {
+        "n": 74,
+        "pred": 0.435983867828417,
+        "obs": 0.527027027027027
+      }
+    },
+    "non_attempts_counterfactual": {
+      "30-39": {
+        "n": 638,
+        "pred_make_if_attempted": 0.7894601592227467
+      },
+      "40-49": {
+        "n": 990,
+        "pred_make_if_attempted": 0.6152525746723951
+      },
+      "50-54": {
+        "n": 894,
+        "pred_make_if_attempted": 0.48785323290348537
+      },
+      "55+": {
+        "n": 3838,
+        "pred_make_if_attempted": 0.348649543238427
+      }
+    }
+  },
+  "training_rows": {
+    "fourth_downs": 76123,
+    "attempts": 29922
+  },
+  "selection_features": {
+    "continuous": [
+      "yards_to_goal",
+      "distance",
+      "score_diff",
+      "pct_game_played",
+      "offense_elo",
+      "defense_elo",
+      "wind_speed",
+      "temperature",
+      "elevation_m"
+    ],
+    "binary": [
+      "home_indicator",
+      "grass",
+      "indoors"
+    ]
+  },
+  "outcome_features": {
+    "continuous": [
+      "yards_to_goal",
+      "yards_to_goal_sq",
+      "offense_elo",
+      "wind_speed",
+      "precipitation",
+      "elevation_m",
+      "season"
+    ],
+    "binary": [
+      "indoors"
+    ]
+  },
+  "model": "field_goal",
+  "version": "2.0.0",
+  "trained_at": "2026-09-13T03:26:20.587875+00:00",
+  "libraries": {
+    "python": "3.12.13",
+    "xgboost": "3.4.1",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1"
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "description": "P(fourth-down attempt gains a first down or TD without a turnover).",
+  "features": [
+    "distance",
+    "yards_to_goal",
+    "diff_time_ratio",
+    "home_indicator",
+    "offense_elo",
+    "defense_elo"
+  ],
+  "config": "A_situation_elo",
+  "training_downs": [
+    4
+  ],
+  "monotone_constraints": {
+    "distance": -1,
+    "home_indicator": 1,
+    "offense_elo": 1,
+    "defense_elo": -1
+  },
+  "ablation_valid": {
+    "A_situation_elo": {
+      "valid_log_loss_4th": 0.6306920811061261,
+      "rounds": 138,
+      "train_rows": 23385
+    },
+    "B_plus_weather": {
+      "valid_log_loss_4th": 0.6306131305342055,
+      "rounds": 121,
+      "train_rows": 23385
+    },
+    "C_plus_team_form": {
+      "valid_log_loss_4th": 0.63060248985526,
+      "rounds": 127,
+      "train_rows": 23385
+    },
+    "D_plus_form_weather": {
+      "valid_log_loss_4th": 0.630492932354875,
+      "rounds": 117,
+      "train_rows": 23385
+    },
+    "E_form_weather_3rd_and_4th": {
+      "valid_log_loss_4th": 0.630051384488277,
+      "rounds": 226,
+      "train_rows": 227247
+    },
+    "baseline_distance_rate": {
+      "valid_log_loss_4th": 0.6363879549198829
+    }
+  },
+  "seasons": {
+    "all": [
+      2013,
+      2025
+    ],
+    "valid": [
+      2022,
+      2023
+    ],
+    "test": [
+      2024,
+      2025
+    ]
+  },
+  "tuning": {
+    "n_trials": 25,
+    "best_rounds": 232,
+    "valid_log_loss": 0.6303327995373682,
+    "params": {
+      "objective": "binary:logistic",
+      "tree_method": "hist",
+      "nthread": -1,
+      "seed": 20260912,
+      "monotone_constraints": [
+        -1,
+        0,
+        0,
+        1,
+        1,
+        -1
+      ],
+      "eval_metric": "logloss",
+      "eta": 0.049974632936770506,
+      "max_depth": 3,
+      "min_child_weight": 77.36665853820892,
+      "subsample": 0.9755853510514165,
+      "colsample_bytree": 0.8861567614048814,
+      "lambda": 3.7328385401598063,
+      "alpha": 0.033760607060705786,
+      "gamma": 0.14790680833446262
+    }
+  },
+  "holdout_test_4th_down": {
+    "overall": {
+      "n": 6933,
+      "log_loss": 0.6324447571337181,
+      "brier": 0.22093642621806478,
+      "ece_20bin": 0.021131885386159826,
+      "base_rate": 0.5269003317467186
+    },
+    "calibration": [
+      {
+        "bin": 0,
+        "pred": 0.0914,
+        "obs": 0.1579,
+        "n": 38
+      },
+      {
+        "bin": 1,
+        "pred": 0.1531,
+        "obs": 0.1633,
+        "n": 196
+      },
+      {
+        "bin": 2,
+        "pred": 0.2534,
+        "obs": 0.2656,
+        "n": 384
+      },
+      {
+        "bin": 3,
+        "pred": 0.3556,
+        "obs": 0.3227,
+        "n": 908
+      },
+      {
+        "bin": 4,
+        "pred": 0.4508,
+        "obs": 0.4352,
+        "n": 1234
+      },
+      {
+        "bin": 5,
+        "pred": 0.5483,
+        "obs": 0.539,
+        "n": 1412
+      },
+      {
+        "bin": 6,
+        "pred": 0.6582,
+        "obs": 0.6369,
+        "n": 1300
+      },
+      {
+        "bin": 7,
+        "pred": 0.7286,
+        "obs": 0.7431,
+        "n": 1382
+      },
+      {
+        "bin": 8,
+        "pred": 0.8249,
+        "obs": 0.8481,
+        "n": 79
+      }
+    ],
+    "by_distance": {
+      "1": {
+        "n": 2488,
+        "pred": 0.7038056254386902,
+        "obs": 0.7053858520900321
+      },
+      "2-3": {
+        "n": 1796,
+        "pred": 0.5501242280006409,
+        "obs": 0.5467706013363028
+      },
+      "4-6": {
+        "n": 1308,
+        "pred": 0.439828485250473,
+        "obs": 0.4105504587155963
+      },
+      "7-10": {
+        "n": 883,
+        "pred": 0.3514848053455353,
+        "obs": 0.319365798414496
+      },
+      "11+": {
+        "n": 458,
+        "pred": 0.1903713196516037,
+        "obs": 0.21179039301310043
+      }
+    },
+    "baseline_distance_rate_log_loss": 0.6362098144306304
+  },
+  "training_rows": {
+    "all": 36765,
+    "fourth_down": 36765
+  },
+  "data_fingerprint": "188bbf599e370f3d",
+  "model": "conversion",
+  "version": "2.0.0",
+  "trained_at": "2026-09-13T03:26:17.987940+00:00",
+  "libraries": {
+    "python": "3.12.13",
+    "xgboost": "3.4.1",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1"
+  }
+}

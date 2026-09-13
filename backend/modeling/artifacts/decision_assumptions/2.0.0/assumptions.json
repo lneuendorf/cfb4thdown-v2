@@ -1,0 +1,573 @@
+{
+  "version": "2.0.0",
+  "seasons": [
+    2013,
+    2025
+  ],
+  "opponent_start_yards_to_goal_after_made_fg": {
+    "n": 21453,
+    "mean": 74.09047685638372,
+    "median": 75.0,
+    "p10": 65.0,
+    "p90": 82.0
+  },
+  "opponent_start_yards_to_goal_after_offensive_td": {
+    "n": 66424,
+    "mean": 73.71999578465615,
+    "median": 75.0,
+    "p10": 65.0,
+    "p90": 82.0
+  },
+  "yards_beyond_line_to_gain_on_non_td_conversion": {
+    "n": 16285,
+    "mean": 5.560331593490942,
+    "median": 3.0,
+    "p10": 0.0,
+    "p90": 15.0
+  },
+  "failed_attempt_opponent_start_minus_line_of_scrimmage": {
+    "n": 16272,
+    "mean": -0.3632620452310718,
+    "median": 0.0,
+    "p10": -6.0,
+    "p90": 3.0
+  },
+  "missed_fg_opponent_start_minus_line_of_scrimmage": {
+    "n": 7296,
+    "mean": -2.8074287280701755,
+    "median": 0.0,
+    "p10": -10.0,
+    "p90": 0.0,
+    "share_at_20_or_better_for_receiver": 0.984375
+  },
+  "conversion_yards_beyond_quantiles": {
+    "quantiles": [
+      0.05,
+      0.15,
+      0.25,
+      0.35,
+      0.45,
+      0.55,
+      0.65,
+      0.75,
+      0.85,
+      0.95
+    ],
+    "by_ytg_and_distance": {
+      "1-10|1-2": {
+        "n": 2061,
+        "yards_beyond": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          6.0
+        ]
+      },
+      "1-10|3-6": {
+        "n": 476,
+        "yards_beyond": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          5.0
+        ]
+      },
+      "1-10|7-99": {
+        "n": 73,
+        "yards_beyond": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          3.0
+        ]
+      },
+      "11-20|1-2": {
+        "n": 1308,
+        "yards_beyond": [
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          2.0,
+          2.0,
+          4.0,
+          6.0,
+          10.0,
+          15.0
+        ]
+      },
+      "11-20|3-6": {
+        "n": 414,
+        "yards_beyond": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          6.0,
+          8.0,
+          9.0,
+          12.0,
+          15.0
+        ]
+      },
+      "11-20|7-99": {
+        "n": 177,
+        "yards_beyond": [
+          0.0,
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          3.0,
+          4.0,
+          5.0,
+          7.0,
+          10.0
+        ]
+      },
+      "21-40|1-2": {
+        "n": 3980,
+        "yards_beyond": [
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          7.0,
+          12.0,
+          25.0
+        ]
+      },
+      "21-40|3-6": {
+        "n": 2316,
+        "yards_beyond": [
+          1.0,
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.0,
+          9.0,
+          14.0,
+          20.0,
+          29.0
+        ]
+      },
+      "21-40|7-99": {
+        "n": 1016,
+        "yards_beyond": [
+          0.0,
+          2.0,
+          3.0,
+          4.0,
+          6.0,
+          8.0,
+          11.0,
+          14.0,
+          19.0,
+          25.0
+        ]
+      },
+      "41-60|1-2": {
+        "n": 3410,
+        "yards_beyond": [
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          7.0,
+          12.0,
+          36.0
+        ]
+      },
+      "41-60|3-6": {
+        "n": 1234,
+        "yards_beyond": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.0,
+          10.0,
+          13.0,
+          20.049999999999955,
+          38.0
+        ]
+      },
+      "41-60|7-99": {
+        "n": 550,
+        "yards_beyond": [
+          0.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          7.0,
+          10.0,
+          14.0,
+          21.0,
+          34.0
+        ]
+      },
+      "61-99|1-2": {
+        "n": 1546,
+        "yards_beyond": [
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          2.0,
+          2.0,
+          3.0,
+          5.0,
+          10.0,
+          24.0
+        ]
+      },
+      "61-99|3-6": {
+        "n": 477,
+        "yards_beyond": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          6.0,
+          8.0,
+          10.0,
+          14.0,
+          20.0,
+          30.19999999999999
+        ]
+      },
+      "61-99|7-99": {
+        "n": 435,
+        "yards_beyond": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          6.0,
+          8.0,
+          11.0,
+          14.0,
+          19.0,
+          35.0
+        ]
+      }
+    }
+  },
+  "snap_to_next_snap_seconds": {
+    "conversion_same_offense": {
+      "median_seconds": 28.64741641337389,
+      "median_seconds_final_2_minutes_of_half": 14.0,
+      "n": 16009
+    },
+    "turnover_on_downs": {
+      "median_seconds": 9.0,
+      "median_seconds_final_2_minutes_of_half": 7.0,
+      "n": 18591
+    },
+    "touchdown_then_kickoff": {
+      "median_seconds": 9.0,
+      "median_seconds_final_2_minutes_of_half": 7.0,
+      "n": 68802
+    },
+    "field_goal_made_then_kickoff": {
+      "median_seconds": 7.151515151515127,
+      "median_seconds_final_2_minutes_of_half": 5.0,
+      "n": 21751
+    },
+    "field_goal_missed": {
+      "median_seconds": 6.230141639091698,
+      "median_seconds_final_2_minutes_of_half": 3.4980620155038764,
+      "n": 7326
+    },
+    "punt": {
+      "median_seconds": 8.0,
+      "median_seconds_final_2_minutes_of_half": 7.0,
+      "n": 101114
+    }
+  },
+  "punt_model_min_supported_yards_to_goal": 30,
+  "weather_defaults": {
+    "temperature": 68.4,
+    "wind_speed": 7.0,
+    "precipitation": 0.0,
+    "elevation_m": 185.4387054
+  },
+  "timeouts_median_by_half_and_minutes_left": {
+    "1|0": {
+      "offense": 1,
+      "defense": 2
+    },
+    "1|1": {
+      "offense": 2,
+      "defense": 2
+    },
+    "1|2": {
+      "offense": 2,
+      "defense": 2
+    },
+    "1|3": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|4": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|5": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|6": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|7": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|8": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|9": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|10": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|11": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|12": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|13": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|14": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|15": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|16": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|17": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|18": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|19": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|20": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|21": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|22": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|23": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|24": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|25": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|26": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|27": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|28": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|29": {
+      "offense": 3,
+      "defense": 3
+    },
+    "1|30": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|0": {
+      "offense": 1,
+      "defense": 2
+    },
+    "2|1": {
+      "offense": 2,
+      "defense": 2
+    },
+    "2|2": {
+      "offense": 2,
+      "defense": 2
+    },
+    "2|3": {
+      "offense": 2,
+      "defense": 2
+    },
+    "2|4": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|5": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|6": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|7": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|8": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|9": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|10": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|11": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|12": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|13": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|14": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|15": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|16": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|17": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|18": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|19": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|20": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|21": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|22": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|23": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|24": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|25": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|26": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|27": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|28": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|29": {
+      "offense": 3,
+      "defense": 3
+    },
+    "2|30": {
+      "offense": 3,
+      "defense": 3
+    }
+  }
+}
