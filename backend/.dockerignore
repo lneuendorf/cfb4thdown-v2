@@ -1,0 +1,7 @@
+.venv
+data
+fixtures
+tests
+analysis
+**/__pycache__
+modeling/reports
