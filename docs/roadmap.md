@@ -14,7 +14,7 @@ Pages and their jobs are in `docs/sitemap.md`. Deferred ideas that aren't schedu
 | 3 | Derived (Punt Index, Week in Review) | Built; pages carry an "under review" notice until the review gate passes |
 | 4 | Simulator | Built |
 | 5 | Backfill 2013–2025 | Done early (in-sample grades) |
-| 6 | Live grading (pending-decision card) | Prototype built and replay-tested; not in production |
+| 6 | Live grading (pending-decision card) | Built and replay-validated; a full live Saturday not yet observed |
 | 7 | Model improvements | Planned |
 
 Phases 0–5 keep their original numbers. Live grading moved out of Phase 2 into a new Phase 6, following `docs/v1-audit.md` §5. Phase 7 is new.
@@ -228,33 +228,51 @@ Phase 2 pages can go live before the gate if every grade is labeled as model out
 - **Caveat:** grades are in-sample, because the models were trained on these seasons.
 - **Remaining:** re-run after every model version bump, and resolve the in-sample question at the review gate.
 
-## Phase 6 — Live grading · Prototype built
+## Phase 6 — Live grading · Built; live Saturday pending
 
 **Goal:** the pending-decision card, meaning the recommendation before the snap.
 
-**Already built:**
-- ESPN provider with raw snapshots;
-- `jobs.live_capture`;
-- `jobs.live_poll` (`--once`, `--loop`, `--replay`), writing `live_pending` and `live_decisions`;
-- `analysis/validate_live.py`.
+**Built before this phase:** ESPN provider with raw snapshots, `jobs.live_capture`, `jobs.live_poll`, `analysis/validate_live.py`.
 
-In the 2026-09-13 replay, offense, field position, distance and score matched the play that followed (17 of 17). Timeouts matched 53–77%.
+**Built (2026-09-13)**
+1. **Live loop in the scheduler** (`app/scheduler.py`):
+   - polls every 20 s while any game is in progress, and refreshes the ticker from the same scoreboard;
+   - the ticker checks every minute within 15 minutes of a kickoff, so polling starts promptly;
+   - after the last game, one final poll grades final summaries and pending cards clear;
+   - one `run_log` row per ~30 minutes of polling, and raw ESPN snapshots older than 7 days are pruned daily.
+2. **Request budget** (`LivePoller`):
+   - summaries only for games on third or fourth down, other live games every 5 minutes, and a final summary once per game;
+   - about 15–25 requests a minute with 15 live games, down from about 48.
+3. **ESPN resilience:** retries alternate between `site.api.espn.com` and `site.web.api.espn.com` (403s included), with capped exponential backoff. `/scoreboard/live` sets `stale` when the ticker or live poll is more than 2 minutes behind.
+4. **Timeouts:** no better free source exists, so live grades and pending cards within 5 minutes of the end of a half carry `timeouts_uncertain`, and the UI says so.
+5. **Reconciliation** (`app/reconcile.py`, run by `jobs.process` after each batch grade):
+   - live grades are matched to CFBD plays and stored in `live_batch_links`;
+   - batch grades replace live ones in every view, and game pages resolve old ESPN `#play-` links through `play_aliases`.
+6. **`GET /scoreboard/live`:**
+   - today's live and batch grades, the pending card (plus `pending_all`), and ticker WP deltas;
+   - the home page switches to live mode and polls every 20 s while games are live;
+   - pending cards show "as of" time;
+   - in-progress game pages refresh every 30 s with provisional grades.
+7. **Tests:** 8 backend (budget, fallback host, reconciliation, live scoreboard, pending expiry, timeouts flag, kickoff detection, pruning) and 2 frontend.
 
-**Scope**
-1. The live poller as a third scheduler loop in the API process (`app/scheduler.py`), active only while games are live.
-2. Request budget: fetch summaries only for games on or near fourth down (today it's about 48 requests a minute with 15 live games).
-3. ESPN resilience: fallback host, backoff, `stale` flag.
-4. A reliable timeouts source, or flag timeouts as uncertain late in halves.
-5. Link ESPN play IDs to CFBD play IDs, and replace live grades with batch grades once CFBD publishes the week. Report how often they disagree.
-6. `/scoreboard/live` with `pending` and ticker WP deltas; the home page in live mode.
-7. Validation on at least one full Saturday, with a larger matched sample and the unmatched cases explained.
+**Validation: replay of the 2026-09-12 capture** (264 scoreboards, 13 games later graded by CFBD):
+- **Matched:** 197 live grades, 184 matched to a CFBD play (93%). The median clock gap is 0 s and the maximum 10 s.
+- **Recommendations:** agree on **183 of 184 (99.5%)**.
+  - **The one disagreement** (game 401864578, Q2 7:31, 4th & 4 at the 54) is a near-exact tie: margins of 0.06 and 0.01 points. The live and batch states differ only in the defense's timeouts (live 3, batch 1), which flipped the order.
+- **Decisions** (what the coach did): agree on 184 of 184.
+- **The 13 unmatched live grades:**
+  - clock gaps beyond 20 s where ESPN's play text has no snap time and the live clock falls back to the previous play's end (Sacramento State–Fresno State accounts for 7);
+  - three plays at the start of a quarter;
+  - one punt with a penalty CFBD treats as no-play.
 
-**Depends on:** Phase 2 (pregame snapshots on schedule, API) and the review gate.
+**Not done**
+- **A full live Saturday, run unattended on the server.** It's the remaining exit criterion; the next chance is 2026-09-19.
+- An independent timeouts source.
 
 **Exit criteria**
 - A full Saturday runs unattended.
 - Pending cards appear and clear correctly.
-- Live and batch recommendations agree on a stated share of plays, with every disagreement explained.
+- Live and batch recommendations agree on a stated share of plays, with every disagreement explained. *(Replay: 99.5%, explained above; re-measure after the first live Saturday.)*
 
 ## Phase 7 — Model improvements · Planned
 

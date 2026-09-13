@@ -28,6 +28,7 @@ flowchart TB
       pregame["pregame_snapshot<br/>before kickoff"]
       teams["teams + coaches · weekly"]
       ticker["ticker · 30 s live"]
+      livepoll["live_poll · 20 s while live<br/>pending card + provisional grades"]
     end
     grading["app.batch + app.grading<br/>shared grading code"]
     api["FastAPI · /api/v1<br/>scoreboard · games · punt index · week in review · simulate · teams · ticker · health"]
@@ -43,6 +44,8 @@ flowchart TB
   artifacts --> backfill --> db
   espn --> check
   espn --> ticker
+  espn --> livepoll
+  livepoll --> grading
   check --> process & pregame
   cfbd --> process & pregame & teams
   process --> grading
@@ -58,7 +61,7 @@ flowchart TB
 - **Local:** training and the historical backfill run on your machine from the raw CFBD cache. The resulting database is uploaded once to the Railway volume (`docs/deploy.md`).
 - **Server:** the Railway service keeps the current season up to date by itself. Its jobs read Elo history and venues from the database, so the server never needs the raw cache.
 - **Requests:** user requests only read SQLite. Upstream APIs are called by scheduled jobs, never per request.
-- **Live grading** (pending fourth-down card) is Phase 6: `jobs.live_poll` exists but isn't scheduled yet.
+- **Live grading:** while games are live, `live_poll` grades fourth downs from ESPN every 20 seconds, including the recommendation before the snap. CFBD's batch grades replace those live grades once published (`app/reconcile.py`).
 
 ## Layout
 
@@ -104,7 +107,7 @@ cd backend && uv sync
 
 ## Status
 
-Phases 0–4 are built: models, grading, the 2013–2025 backfill, current-season processing, the API, scheduled jobs, and the home, game, games, Punt Index, Week in Review and simulator pages. The API runs on Railway and the site on Vercel (`docs/deploy.md`). See `docs/roadmap.md`.
+Phases 0–6 are built: models, grading, the 2013–2025 backfill, current-season processing, live grading with a pending fourth-down card, the API, scheduled jobs, and the home, game, games, Punt Index, Week in Review and simulator pages. The API runs on Railway and the site on Vercel (`docs/deploy.md`). See `docs/roadmap.md`.
 
 ## Run it locally
 

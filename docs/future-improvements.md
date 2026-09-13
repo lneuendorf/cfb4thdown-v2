@@ -24,7 +24,7 @@ Items marked **Done** shipped in Phases 1–2 (`docs/roadmap.md`) and stay here 
    - Grades carry `timeouts_imputed` (54 games in 2025 had no timeout data) and `clock_source` (`interpolated` for ~45% of 2013–2023 plays).
    - A small "estimated clock/timeouts" marker on historical decision cards is honest and cheap.
 4. **Plot the WP chart on every snap.** **Done.** The WP model is trained on downs 1–4, so the game-page chart can use every play, not just fourth downs. Downsample to ~200 points per `api-contract.md`.
-5. **Pending-decision card latency.**
+5. **Pending-decision card latency.** **Done** (Phase 6).
    - The live card exists only between the previous play being logged by ESPN and the snap.
    - Show "as of HH:MM:SS" on the card. Hide it instead of showing a stale recommendation once the play is in the play-by-play.
 6. **Methodology page content.** **Done.** It needs:
@@ -64,10 +64,10 @@ Items marked **Done** shipped in Phases 1–2 (`docs/roadmap.md`) and stay here 
 4. **Reprocessing window with hash comparison.** **Done** (`app/api`, `app/scheduler.py`, `jobs/game_check.py`, `jobs/process.py`).
    - The write-once CFBD cache suits settled seasons.
    - Current-season plays need timestamped snapshots (`providers/rawstore.py` already supports this) plus a content hash, so corrections trigger regrading.
-5. **Reconcile live and batch grades.**
+5. **Reconcile live and batch grades.** **Done** (Phase 6).
    - ESPN play IDs (e.g. `401856672715`) differ from CFBD play IDs (e.g. `401752794101849903`) for the same play. Map by game ID + period + clock + down/distance/yard line, then replace the live grade with the CFBD grade once it lands.
    - Report how often live and batch recommendations disagree.
-6. **ESPN resilience.**
+6. **ESPN resilience.** **Done** (Phase 6).
    - Endpoints are undocumented, and community reports mention 403s from 2026-08-05.
    - Add a fallback host (`site.web.api.espn.com`), exponential backoff, and a `stale` flag in the scoreboard envelope when polls fail.
 7. **Offense detection when `possession` is null.**
@@ -77,7 +77,7 @@ Items marked **Done** shipped in Phases 1–2 (`docs/roadmap.md`) and stay here 
    - ESPN scoreboard timeout counts don't appear to reset at halftime; the live path counts timeout plays in the summary instead.
    - Pending-vs-snap agreement was only 53% (offense) and 77% (defense), partly because timeouts get called between detection and snap.
    - Verify against an independent source (broadcast data, or CFBD after it ingests the week, bearing in mind CFBD derives from ESPN). Decide whether end-of-half grades should carry a timeouts-uncertain flag.
-9. **Live poll request volume.**
+9. **Live poll request volume.** **Done** (Phase 6).
    - Each poll fetches the scoreboard plus a summary for every live game: 16 requests with 15 live games, about 48 a minute at a 20 s cadence against an undocumented API.
    - Fetch summaries only for games on or approaching fourth down, and re-fetch other games' play-by-play every few minutes.
 10. **Replay validation coverage.** `analysis/validate_live.py` could match 17 pending states to their plays. Re-run it after a full Saturday capture (`jobs.live_capture` finishes with final summaries) to get a larger sample and to explain the 12 unmatched states.
@@ -170,3 +170,7 @@ Items marked **Done** shipped in Phases 1–2 (`docs/roadmap.md`) and stay here 
     - It deserves an outside football-analytics review of a sample of `clear` go recommendations before it drives rankings.
     - Also check the ~3-point conversion overprediction at 4–10 yards, which pushes the same direction.
 15. **Conversion outcome when only a touchdown helps.** The option evaluator draws yards gained from the overall conversion distribution. With the clock about to expire, or a touchdown required, teams call different plays. Condition the gain distribution on game state, or model "touchdown on this play" directly.
+
+# Other
+* Search engine optimization
+* autopost to social medias

@@ -57,4 +57,4 @@ If viable, use ESPN for live data and CFBD for historical/model data. Keep the l
 
 ## Current phase
 
-See `docs/roadmap.md` for status. Backend foundations (data, models, grading, backfill, live prototype) are built; **Phases 1–2** are deployed and **Phases 3–4** are built (ranking pages carry an "under review" notice until the review gate passes). Next: the review gate, **Phase 6 — live grading**, and **Phase 7 — model improvements**.
+See `docs/roadmap.md` for status. Backend foundations (data, models, grading, backfill, live prototype) are built; **Phases 1–2** are deployed and **Phases 3, 4 and 6** are built (ranking pages carry an "under review" notice until the review gate passes; live grading awaits its first unattended Saturday). Next: the review gate and **Phase 7 — model improvements**.

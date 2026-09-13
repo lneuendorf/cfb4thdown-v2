@@ -62,13 +62,20 @@ Elo history and venues come from the database (`app/reference.py`), which `backf
 
 Refreshes names, abbreviations, conferences, colors and logos from CFBD `/teams`. One call.
 
-### Ticker: every 30 seconds while games are live, every 10 minutes otherwise
+### Ticker: every 30 seconds while games are live, every minute near a kickoff, every 10 minutes otherwise
 
 Fetches ESPN's scoreboard for `GET /ticker` and holds it in memory. It is score-only and isn't written to the raw store, because nothing is graded from it.
 
-### `live_poll`: Phase 6
+### `live_poll`: every 20 seconds while any game is live
 
-It exists as a CLI (`jobs.live_poll --loop`) but isn't scheduled yet. When live grading ships (`docs/roadmap.md` Phase 6), it joins the scheduler as a third loop, active only while games are live.
+This is the scheduler's third loop (`jobs.live_poll.LivePoller`). Each poll:
+- reads the FBS scoreboard, stored raw, which also refreshes the ticker;
+- fetches summaries only for games on third or fourth down, other live games every 5 minutes, and each game's final summary once;
+- writes `live_pending` (the card before the snap) and `live_decisions` (provisional grades), skipping games CFBD has already graded.
+
+After the last game ends, one final poll grades final summaries and pending cards clear. Counts go to `run_log` about every 30 minutes, and raw ESPN snapshots older than 7 days are pruned daily at 11:00 UTC.
+
+When `process` grades a game from CFBD, `app/reconcile.py` links its live grades to the batch ones (`live_batch_links`), and the batch grade is served from then on.
 
 ### `coaches`: Mondays at 09:00 UTC, after `teams`
 
@@ -93,7 +100,8 @@ It regrades history from processed data after a model change, never on a schedul
 | | `teams` | 1 per week |
 | | `coaches` | 1 per week |
 | ESPN (undocumented, no key) | `game_check` | 24 requests/day |
-| | ticker | 120 requests/hour while games are live |
+| | ticker | every 30 s while live (shared with live poll), every minute near kickoff, every 10 min otherwise |
+| | `live_poll` | 3 scoreboard requests a minute + about 15–25 summaries a minute with 15 live games |
 
 **A typical in-season week** is about 350–500 CFBD calls:
 - about 15 `process` runs on a Saturday and Sunday at 3–4 calls each;

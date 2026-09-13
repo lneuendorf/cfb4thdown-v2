@@ -7,8 +7,7 @@ Implemented in `backend/app/api/`:
 - Phase 3: `/punt-index`, `/punt-index/:subject/:id`, `/week-in-review/:season/:week`, `/week-in-review/latest`.
 
 - Phase 4: `/simulate`.
-
-`/scoreboard/live` is specified but not built yet (Phase 6).
+- Phase 6: `/scoreboard/live`, live grades on `/games/:id`, and WP deltas in `/ticker`.
 
 Every endpoint is served from cache. A user request never triggers an upstream call to CollegeFootballData — if the cache is cold, return what we have with a stale marker rather than blocking.
 
@@ -91,7 +90,16 @@ Powers the home page. Single request, everything the page needs.
 
 **Cache:** 20s while any game is live, 1h otherwise.
 
-`/scoreboard/live` arrives with live grading (`docs/roadmap.md` Phase 6). Until then the home page uses `/scoreboard/latest`.
+As built (Phase 6):
+- **Today's slate:** "today" is every game on ESPN's current scoreboard that is live or kicked off in the last 18 hours.
+- **`decisions`:** live grades (`source: "espn"`) for games CFBD hasn't graded yet, plus batch grades (`source: "cfbd"`) for those it has, sorted by `abs(wp_delta)`.
+- **`pending`:** the live game on fourth down latest in its game.
+  - `pending_all` lists every one.
+  - Each carries `polled_at` (when the scoreboard was read) and `timeouts_uncertain` (within 5 minutes of the end of a half).
+  - A pending card older than 90 s is dropped.
+- **`ticker`:** entries carry `start_date`; `wp_delta_last` is the most recent graded fourth down's delta for that game.
+- **`meta.source`** is `"live"`. `meta.stale` is true when the ticker or live poll is more than 2 minutes behind during live games.
+- **Cache:** 10 s. With no slate, it returns zeros and `pending: null`, and the home page shows `/scoreboard/latest` instead.
 
 ### `GET /scoreboard/week/:season/:week?season_type=regular&limit=50`
 
@@ -193,7 +201,7 @@ Used everywhere. Defined once here.
 
 Team `conference`, `logo_url` and `color`, and a decision's `week` and `outcome`, may be `null`.
 
-`id` is the source's play id as a string: CFBD's for batch grades (`source: "cfbd"`), ESPN's for live grades (`source: "espn"`). Anchors on the game page are `#play-{id}`. When a live grade is replaced by the batch grade (Phase 6), the id changes; the live-to-batch mapping will keep old anchors resolvable.
+`id` is the source's play id as a string: CFBD's for batch grades (`source: "cfbd"`), ESPN's for live grades (`source: "espn"`). Anchors on the game page are `#play-{id}`. When a live grade is replaced by the batch grade, the id changes; `GET /games/:id` returns `play_aliases` (ESPN id → CFBD id) so old anchors still resolve. Live decisions also carry `timeouts_uncertain`.
 
 Data-quality flags:
 - `clock_source`: `text_snap` (snap time in the play text), `interpolated` (stale clock reconstructed), or a recorded-clock rule. The UI marks `interpolated` as an estimated clock.
@@ -246,6 +254,7 @@ The 0.05 threshold lives in one place in the backend. Don't hardcode it in the f
 | `awaiting_plays` | Final, but CFBD hasn't published play-by-play yet |
 | `not_final` | Not final |
 | `not_processed` | Final and waiting for the next process run |
+| `provisional` | Not batch graded yet; `decisions` are live grades from ESPN play-by-play (`source: "espn"`) |
 
 `totals.*.wp_delta` sums that team's decisions (≤ 0).
 
