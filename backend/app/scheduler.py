@@ -8,7 +8,8 @@ Two loops:
   every TICKER_IDLE_SECONDS otherwise. Held in memory for GET /ticker.
 - jobs, checked every minute and run hourly at CHECK_MINUTE: jobs.game_check, then
   jobs.process when it reports new finals or the daily reprocessing slot, and
-  jobs.pregame_snapshot when a kickoff is near. Mondays at TEAMS_HOUR_UTC: jobs.teams.
+  jobs.pregame_snapshot when a kickoff is near. Mondays at TEAMS_HOUR_UTC (and
+  on the first hourly check if no coach attribution exists yet): jobs.teams, then jobs.coaches.
 
 Jobs run in a worker thread one at a time; a failing job is logged (run_log) and the loop
 keeps going.
@@ -121,7 +122,7 @@ class Scheduler:
         if now.minute < CHECK_MINUTE or self._last_check_hour == hour:
             return
         self._last_check_hour = hour
-        from jobs import game_check, pregame_snapshot, process, teams
+        from jobs import coaches, game_check, pregame_snapshot, process, teams
 
         result = await asyncio.to_thread(game_check.run)
         LOG.info("game_check: %s", result.counts)
@@ -130,6 +131,15 @@ class Scheduler:
         if result.season and result.pregame_due:
             await asyncio.to_thread(pregame_snapshot.run, result.season, 3.0, True)
         day = now.strftime("%Y-%m-%d")
-        if now.weekday() == 0 and now.hour == TEAMS_HOUR_UTC and self._last_teams_day != day:
+        weekly = now.weekday() == 0 and now.hour == TEAMS_HOUR_UTC
+        if (weekly or not await asyncio.to_thread(_has_coaches)) and self._last_teams_day != day:
             self._last_teams_day = day
             await asyncio.to_thread(teams.run)
+            await asyncio.to_thread(coaches.run)
+
+
+def _has_coaches() -> bool:
+    from app import db
+
+    with db.connect() as conn:
+        return conn.execute("SELECT 1 FROM coach_team_seasons LIMIT 1").fetchone() is not None

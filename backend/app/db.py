@@ -223,6 +223,45 @@ CREATE TABLE IF NOT EXISTS wp_series (
     home_wp REAL NOT NULL,
     PRIMARY KEY (game_id, seq)
 );
+-- Coach attribution (jobs/coaches.py). One row per coach segment of a team-season.
+CREATE TABLE IF NOT EXISTS coaches (
+    coach_id INTEGER PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT,
+    hire_date TEXT
+);
+
+CREATE TABLE IF NOT EXISTS coach_team_seasons (
+    coach_id INTEGER NOT NULL,
+    team_id INTEGER NOT NULL,
+    season INTEGER NOT NULL,
+    segment INTEGER NOT NULL,
+    games INTEGER NOT NULL,
+    first_game_start TEXT,
+    last_game_start TEXT,
+    is_interim INTEGER NOT NULL,
+    attribution TEXT NOT NULL,
+    PRIMARY KEY (team_id, season, segment)
+);
+CREATE INDEX IF NOT EXISTS idx_cts_coach ON coach_team_seasons(coach_id);
+
+CREATE TABLE IF NOT EXISTS coach_attribution_issues (
+    team_id INTEGER NOT NULL,
+    season INTEGER NOT NULL,
+    reason TEXT NOT NULL,
+    coaches INTEGER,
+    PRIMARY KEY (team_id, season)
+);
+
+-- Optional manual commentary for Week in Review (plain text, paragraphs split on blank lines).
+CREATE TABLE IF NOT EXISTS week_commentary (
+    season INTEGER NOT NULL,
+    season_type TEXT NOT NULL,
+    week INTEGER NOT NULL,
+    body TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (season, season_type, week)
+);
 """
 
 # Columns added after a table first shipped; connect() adds them to older databases.
@@ -273,6 +312,10 @@ PRIMARY_KEYS = {
     "venues": ("venue_id",),
     "game_sources": ("game_id",),
     "wp_series": ("game_id", "seq"),
+    "coaches": ("coach_id",),
+    "coach_team_seasons": ("team_id", "season", "segment"),
+    "coach_attribution_issues": ("team_id", "season"),
+    "week_commentary": ("season", "season_type", "week"),
     "games": ("game_id",),
     "plays_fourth_down": ("play_id",),
     "exclusions": ("play_id",),
