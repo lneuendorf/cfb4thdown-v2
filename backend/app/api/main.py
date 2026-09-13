@@ -26,7 +26,7 @@ from fastapi.responses import JSONResponse
 
 from app import db
 from app import decisions as pipeline
-from app.api import store
+from app.api import aggregates, store
 from app.scheduler import Scheduler, TickerCache
 
 SeasonType = Literal["regular", "postseason"]
@@ -196,6 +196,64 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
         limit: Annotated[int, Query(ge=1, le=500)] = 50,
     ) -> dict:
         data = store.week_scoreboard(conn, season, week, season_type, limit)
+        if data is None:
+            raise ApiError(404, "WEEK_NOT_FOUND", "No games in that week.")
+        response.headers["Cache-Control"] = CACHE_WEEK if data["is_complete"] else CACHE_SHORT
+        return envelope(data, conn)
+
+    @app.get(f"{v1}/punt-index")
+    def punt_index(
+        conn: Conn,
+        response: Response,
+        subject: Literal["coach", "team"] = "coach",
+        metric: Literal["wp_lost", "go_rate"] = "wp_lost",
+        season_from: int | None = None,
+        season_to: int | None = None,
+        conference: str | None = None,
+        min_games: Annotated[int, Query(ge=0, le=200)] = 6,
+        returning: bool = False,
+    ) -> dict:
+        latest = aggregates.latest_season(conn, min_games) or aggregates.latest_season(conn)
+        if latest is None:
+            raise ApiError(503, "PIPELINE_COLD", "No graded games yet.")
+        season_to = season_to or latest
+        season_from = season_from or season_to
+        if season_from > season_to:
+            raise ApiError(400, "BAD_PARAMS", "season_from must not be after season_to.")
+        data = aggregates.punt_index(
+            conn, subject, metric, season_from, season_to, conference, min_games, returning
+        )
+        response.headers["Cache-Control"] = CACHE_WEEK
+        return envelope(data, conn)
+
+    @app.get(f"{v1}/punt-index/{{subject}}/{{key}}")
+    def punt_index_detail(
+        subject: Literal["coach", "team"], key: int, conn: Conn, response: Response
+    ) -> dict:
+        data = aggregates.punt_index_detail(conn, subject, key)
+        if data is None:
+            raise ApiError(404, "NOT_FOUND", f"No graded fourth downs for that {subject}.")
+        response.headers["Cache-Control"] = CACHE_WEEK
+        return envelope(data, conn)
+
+    @app.get(f"{v1}/week-in-review/latest")
+    def week_in_review_latest(conn: Conn, response: Response) -> dict:
+        latest = aggregates.latest_complete_week(conn)
+        if latest is None:
+            raise ApiError(503, "PIPELINE_COLD", "No complete week yet.")
+        season, season_type, week = latest
+        response.headers["Cache-Control"] = CACHE_SHORT
+        return envelope(aggregates.week_in_review(conn, season, week, season_type), conn)
+
+    @app.get(f"{v1}/week-in-review/{{season}}/{{week}}")
+    def week_in_review(
+        season: int,
+        week: int,
+        conn: Conn,
+        response: Response,
+        season_type: SeasonType = "regular",
+    ) -> dict:
+        data = aggregates.week_in_review(conn, season, week, season_type)
         if data is None:
             raise ApiError(404, "WEEK_NOT_FOUND", "No games in that week.")
         response.headers["Cache-Control"] = CACHE_WEEK if data["is_complete"] else CACHE_SHORT

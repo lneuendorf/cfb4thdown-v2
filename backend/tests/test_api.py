@@ -98,6 +98,20 @@ def client(tmp_path, monkeypatch):
                   "reason": "game_failed_quality_gate", "run_id": "test"}]
             ),
         )  # fmt: skip
+        db.upsert_rows(
+            conn,
+            "coaches",
+            pd.DataFrame([{"coach_id": 7001, "first_name": "Fake", "last_name": "Coach"}]),
+        )
+        db.upsert_rows(
+            conn,
+            "coach_team_seasons",
+            pd.DataFrame(
+                [{"coach_id": 7001, "team_id": HOME, "season": 2099, "segment": 1, "games": 2,
+                  "first_game_start": recent, "last_game_start": recent, "is_interim": 0,
+                  "attribution": "sole"}]
+            ),
+        )  # fmt: skip
     monkeypatch.setenv("CFB4THDOWN_DB", str(path))
     return TestClient(main.create_app(scheduler_enabled=False))
 
@@ -159,3 +173,33 @@ def test_health_is_200_before_the_database_exists(tmp_path, monkeypatch):
     monkeypatch.setenv("CFB4THDOWN_DB", str(tmp_path / "missing.db"))
     r = TestClient(main.create_app(scheduler_enabled=False)).get("/api/v1/health")
     assert r.status_code == 200 and r.json()["status"] == "cold"
+
+
+def test_punt_index_ranks_conservative_wp_lost(client):
+    body = client.get("/api/v1/punt-index?subject=team&season_from=2099&min_games=1").json()
+    rows = body["data"]["rows"]
+    # The away team punted when the model said go (-0.111); the home team went when it said go.
+    away = next(r for r in rows if r["id"] == str(AWAY))
+    assert away["value"] == 0.111 and away["go_recommendations"] == 1 and away["rank"] == 1
+    assert next(r for r in rows if r["id"] == str(HOME))["value"] == 0.0
+
+
+def test_punt_index_sample_warning_and_coach_attribution(client):
+    data = client.get("/api/v1/punt-index?subject=coach&season_from=2099&min_games=5").json()[
+        "data"
+    ]
+    assert [r["name"] for r in data["rows"]] == ["Fake Coach"]
+    assert data["rows"][0]["sample_warning"] and data["rows"][0]["rank"] is None
+    assert data["unattributed_fourth_downs"] == 1  # the away team has no coach segment
+    detail = client.get("/api/v1/punt-index/coach/7001").json()["data"]
+    assert detail["name"] == "Fake Coach" and detail["seasons"][0]["season"] == 2099
+
+
+def test_week_in_review(client):
+    data = client.get("/api/v1/week-in-review/2099/1").json()["data"]
+    assert data["worst_call"]["id"] == "2" and data["best_call"]["id"] == "1"
+    assert data["wp_lost_total"] == 0.111 and data["fourth_downs_total"] == 2
+    assert data["by_conference"][0]["conference"] == "Fake"
+    assert data["commentary"] is None
+    latest = client.get("/api/v1/week-in-review/latest").json()["data"]
+    assert (latest["season"], latest["week"]) == (2099, 1)

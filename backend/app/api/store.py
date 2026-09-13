@@ -201,7 +201,7 @@ def get_game(conn: sqlite3.Connection, game_id: int) -> dict | None:
         (game_id,),
     ).fetchall()
     teams = teams_by_id(conn, [game["home_id"], game["away_id"]])
-    decisions = [_decision(r, game, teams) for r in rows]
+    decisions = [decision_object(r, game, teams) for r in rows]
     status = grading_status(conn, game, len(decisions))
     now = datetime.now(UTC)
     agg = {"fourth_downs": len(decisions), "wp_lost": -sum(
@@ -252,7 +252,7 @@ def get_game(conn: sqlite3.Connection, game_id: int) -> dict | None:
 # ------------------------------------------------------------------ decisions
 
 
-def _decision(r: sqlite3.Row, game: sqlite3.Row, teams: dict[int, dict]) -> dict:
+def decision_object(r: sqlite3.Row, game: sqlite3.Row, teams: dict[int, dict]) -> dict:
     home = r["offense_id"] == game["home_id"]
     off_name, def_name = (
         (game["home_team"], game["away_team"]) if home else (game["away_team"], game["home_team"])
@@ -349,7 +349,7 @@ def week_scoreboard(
         if graded_games
         else None,
         "pending": None,
-        "decisions": [_decision(r, game_rows[r["game_id"]], teams) for r in rows[:limit]],
+        "decisions": [decision_object(r, game_rows[r["game_id"]], teams) for r in rows[:limit]],
         "decisions_total": len(rows),
         "games": games,
         "ticker": [],
