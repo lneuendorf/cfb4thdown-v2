@@ -119,11 +119,23 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
     v1 = "/api/v1"
 
     @app.get(f"{v1}/health")
-    def health(conn: Conn) -> dict:
-        data = store.health(conn, pipeline.model_versions())
-        data["scheduler_enabled"] = scheduler is not None
-        data["ticker_updated_at"] = ticker.updated_at
-        return data
+    def health() -> dict:
+        """Liveness plus pipeline status. Always 200 while the process is up, so a host
+        healthcheck passes before the database is seeded; `status` says whether data exists."""
+        extra = {"scheduler_enabled": scheduler is not None, "ticker_updated_at": ticker.updated_at}
+        path = db_path()
+        if not path.exists():
+            return {"status": "cold", "message": "No database yet.", "model_versions":
+                    pipeline.model_versions(), **extra}  # fmt: skip
+        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        conn.row_factory = sqlite3.Row
+        try:
+            return {**store.health(conn, pipeline.model_versions()), **extra}
+        except sqlite3.Error:
+            return {"status": "cold", "message": "Database is not readable yet.",
+                    "model_versions": pipeline.model_versions(), **extra}  # fmt: skip
+        finally:
+            conn.close()
 
     @app.get(f"{v1}/teams")
     def teams(conn: Conn, response: Response, classification: str | None = None) -> dict:

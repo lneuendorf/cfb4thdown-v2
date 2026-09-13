@@ -153,3 +153,9 @@ def test_cold_database_is_503(tmp_path, monkeypatch):
     monkeypatch.setenv("CFB4THDOWN_DB", str(tmp_path / "missing.db"))
     r = TestClient(main.create_app(scheduler_enabled=False)).get("/api/v1/games/1")
     assert r.status_code == 503 and r.json()["error"]["code"] == "PIPELINE_COLD"
+
+
+def test_health_is_200_before_the_database_exists(tmp_path, monkeypatch):
+    monkeypatch.setenv("CFB4THDOWN_DB", str(tmp_path / "missing.db"))
+    r = TestClient(main.create_app(scheduler_enabled=False)).get("/api/v1/health")
+    assert r.status_code == 200 and r.json()["status"] == "cold"
