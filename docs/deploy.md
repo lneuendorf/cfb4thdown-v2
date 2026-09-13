@@ -94,17 +94,23 @@ Open a shell in the running service and download it:
 ```bash
 railway link            # pick the project and service
 railway ssh
-# inside the container:
-curl -fL -H "Authorization: Bearer <a GitHub token with repo read>" \
-  -H "Accept: application/octet-stream" \
-  -o /data/cfb4thdown.db.gz "<asset url from above>"
+# inside the container (python:3.12-slim has no curl):
+python - <<'PY'
+import urllib.request
+req = urllib.request.Request("<asset url from above>", headers={
+    "Authorization": "Bearer <a GitHub token with Contents: read>",
+    "Accept": "application/octet-stream"})
+with urllib.request.urlopen(req) as r, open("/data/cfb4thdown.db.gz", "wb") as f:
+    while chunk := r.read(1 << 20):
+        f.write(chunk)
+PY
 gunzip -f /data/cfb4thdown.db.gz && ls -lh /data
 exit
 ```
 
-Then delete the release: `gh release delete db-seed-2026-09-13 --yes --cleanup-tag`. Use a fine-grained token scoped to this repo and revoke it afterwards. Don't paste it anywhere else.
+Keep `SCHEDULER_ENABLED=0` while copying. Then delete the release: `gh release delete db-seed-2026-09-13 --repo lneuendorf/cfb4thdown-v2 --yes --cleanup-tag`. Use a fine-grained token scoped to this repo and revoke it afterwards. Don't paste it anywhere else.
 
-**Option B: any presigned URL.** For example S3, R2 or Dropbox. Upload `deploy.db.gz`, then run the same `curl -fL -o /data/cfb4thdown.db.gz "<url>"` inside `railway ssh`.
+**Option B: any presigned URL.** For example S3, R2 or Dropbox. Upload `deploy.db.gz`, then download it inside `railway ssh` with the same Python snippet, without the Authorization header.
 
 Check that it worked:
 
@@ -155,7 +161,7 @@ Preview deployments get their own URLs, which aren't in `CORS_ORIGINS`, so their
 
 - **Code:** push to `main`. Both platforms redeploy, and the volume keeps the database.
 - **New model version:** re-run `jobs.backfill` locally, then repeat steps 2 and 4 with `SCHEDULER_ENABLED=0` during the copy. The server has no processed historical data to regrade from.
-- **Rollback:** Railway → Deployments → redeploy an earlier build. Take a database backup first with `railway ssh` then `sqlite3 /data/cfb4thdown.db "VACUUM INTO '/data/backup.db'"`.
+- **Rollback:** Railway → Deployments → redeploy an earlier build. Take a database backup first with `railway ssh` then `python -c "import sqlite3; sqlite3.connect('/data/cfb4thdown.db').execute(\"VACUUM INTO '/data/backup.db'\")"` (the image has no `sqlite3` CLI).
 
 ## Costs (rough)
 
