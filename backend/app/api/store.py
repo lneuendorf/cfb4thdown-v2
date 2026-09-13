@@ -22,6 +22,10 @@ GRADING_MESSAGES = {
     "not_final": "Not graded yet: the game isn't final.",
     "not_processed": "Not graded yet: this game is waiting to be processed.",
     "no_fourth_downs": "Graded, but no fourth downs were in scope.",
+    "provisional": (
+        "Live grades from ESPN play-by-play. They're replaced by final grades once the official "
+        "play-by-play is published, usually within a day."
+    ),
 }
 DONE_STATUSES = ("graded", "failed_quality_gate")
 STALE_AFTER_HOURS = 18
@@ -203,6 +207,14 @@ def get_game(conn: sqlite3.Connection, game_id: int) -> dict | None:
     teams = teams_by_id(conn, [game["home_id"], game["away_id"]])
     decisions = [decision_object(r, game, teams) for r in rows]
     status = grading_status(conn, game, len(decisions))
+    if not decisions and status != "failed_quality_gate":
+        from app.api import live  # provisional grades from live play-by-play
+
+        provisional = live.live_decisions_for(
+            conn, [game_id], {game_id} if not game["is_final"] else set()
+        )
+        if provisional:
+            decisions, status = provisional, "provisional"
     now = datetime.now(UTC)
     agg = {"fourth_downs": len(decisions), "wp_lost": -sum(
         d["wp_delta"] or 0 for d in decisions if d["decision"] != d["recommendation"])}  # fmt: skip
@@ -246,7 +258,14 @@ def get_game(conn: sqlite3.Connection, game_id: int) -> dict | None:
         "wp_series": series,
         "decisions": decisions,
         "totals": totals,
+        "play_aliases": _aliases(conn, game_id),
     }
+
+
+def _aliases(conn: sqlite3.Connection, game_id: int) -> dict[str, str]:
+    from app.api import live
+
+    return live.play_aliases(conn, game_id)
 
 
 # ------------------------------------------------------------------ decisions

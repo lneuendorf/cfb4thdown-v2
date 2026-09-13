@@ -253,3 +253,10 @@ def test_jobs_and_api_share_the_env_database(tmp_path, monkeypatch):
         assert conn.execute(
             "SELECT name FROM sqlite_master WHERE name = 'coach_team_seasons'"
         ).fetchone()
+
+
+def test_scoreboard_live_without_a_slate(client):
+    r = client.get("/api/v1/scoreboard/live")
+    assert r.status_code == 200
+    data = r.json()["data"]
+    assert data["games_live"] == 0 and data["pending"] is None and data["decisions"] == []

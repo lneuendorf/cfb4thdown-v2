@@ -27,7 +27,7 @@ from fastapi.responses import JSONResponse
 
 from app import db
 from app import decisions as pipeline
-from app.api import aggregates, simulate, store
+from app.api import aggregates, live, simulate, store
 from app.scheduler import Scheduler, TickerCache
 
 SeasonType = Literal["regular", "postseason"]
@@ -124,7 +124,11 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
     def health() -> dict:
         """Liveness plus pipeline status. Always 200 while the process is up, so a host
         healthcheck passes before the database is seeded; `status` says whether data exists."""
-        extra = {"scheduler_enabled": scheduler is not None, "ticker_updated_at": ticker.updated_at}
+        extra = {
+            "scheduler_enabled": scheduler is not None,
+            "ticker_updated_at": ticker.updated_at,
+            "live_polled_at": scheduler.live_polled_at if scheduler else None,
+        }
         path = db_path()
         if not path.exists():
             return {"status": "cold", "message": "No database yet.", "model_versions":
@@ -294,12 +298,40 @@ def create_app(scheduler_enabled: bool | None = None) -> FastAPI:
         response.headers["Cache-Control"] = "public, max-age=3600, s-maxage=86400"
         return envelope(data, None, source="model")
 
+    @app.get(f"{v1}/scoreboard/live")
+    def scoreboard_live(conn: Conn, response: Response) -> dict:
+        """Today's slate: live and batch grades, pending fourth downs, ticker with WP deltas."""
+        data = live.scoreboard(conn, ticker.games)
+        response.headers["Cache-Control"] = "public, max-age=10, s-maxage=10"
+        stale = ticker.is_stale() or (
+            data["games_live"] > 0 and scheduler is not None and scheduler.live_is_stale()
+        )
+        return {
+            "data": data,
+            "meta": {
+                "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "stale": stale,
+                "source": "live",
+            },
+        }
+
     @app.get(f"{v1}/ticker")
     def ticker_scores(response: Response) -> dict:
         """ESPN scores for the ticker, refreshed by the scheduler. Never fetched per request."""
         response.headers["Cache-Control"] = "public, max-age=20, s-maxage=20"
+        games = ticker.games
+        path = db_path()
+        if path.exists() and games:
+            conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+            conn.row_factory = sqlite3.Row
+            try:
+                games = live.scoreboard(conn, ticker.games)["ticker"]
+            except sqlite3.Error:
+                pass
+            finally:
+                conn.close()
         return {
-            "data": {"games": ticker.games, "games_live": ticker.games_live},
+            "data": {"games": games, "games_live": ticker.games_live},
             "meta": {
                 "generated_at": ticker.updated_at
                 or datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
