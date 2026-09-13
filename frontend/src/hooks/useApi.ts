@@ -16,6 +16,7 @@ export interface ApiState<T> {
 export function useApi<T>(
   path: string | null,
   pollMs: number | null | ((data: T | undefined) => number | null) = null,
+  options: { keepPrevious?: boolean } = {},
 ): ApiState<T> & { reload: () => void } {
   const [result, setResult] = useState<ApiState<T>>({
     state: "loading",
@@ -26,10 +27,13 @@ export function useApi<T>(
   const [tick, setTick] = useState(0);
   const dataRef = useRef<T | undefined>(undefined);
 
+  const keepPrevious = options.keepPrevious ?? false;
   useEffect(() => {
+    // keepPrevious: show the last result while the next one loads (e.g. simulator inputs).
+    if (keepPrevious && dataRef.current !== undefined) return;
     dataRef.current = undefined;
     setResult({ state: "loading", data: undefined, meta: undefined, error: undefined });
-  }, [path]);
+  }, [path, keepPrevious]);
 
   useEffect(() => {
     if (!path) return;

@@ -271,3 +271,46 @@ export interface WeekInReview {
   punt_index_movers: PuntIndexMover[];
   commentary: string | null;
 }
+
+// ---- Phase 4: simulator ----
+
+export interface SimulateResult extends OptionWps {
+  recommendation: Option;
+  confidence: Confidence;
+  margin: number | null;
+  p_convert: number | null;
+  p_fg_make: number | null;
+  punt_opponent_yards_to_goal: number | null;
+  inputs: {
+    distance: number;
+    yards_to_goal: number;
+    offense_score: number;
+    defense_score: number;
+    period: number;
+    clock_seconds: number;
+    offense_timeouts: number;
+    defense_timeouts: number;
+    spread: number;
+    home: "home" | "away" | "neutral";
+    offense_elo: number;
+    defense_elo: number;
+  };
+  defaults: Record<string, number | string | boolean>;
+  model_versions: Record<string, string>;
+  historical: {
+    similar_situations: number;
+    went_for_it: number | null;
+    punted: number | null;
+    kicked_field_goal: number | null;
+    model_said_go: number | null;
+    conversion_rate: number | null;
+    criteria: {
+      distance: [number, number];
+      yards_to_goal: [number, number];
+      score_diff: [number, number];
+      period: number;
+      scope: string;
+    };
+    examples: Decision[];
+  };
+}

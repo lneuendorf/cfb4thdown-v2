@@ -1,34 +1,5 @@
 import { Link } from "react-router-dom";
-import { Notice, PageHeader } from "../components/PageHeader";
-
-// Pages whose data isn't served yet (docs/roadmap.md). Each states the page's job from
-// docs/sitemap.md so the nav is honest about what's coming.
-
-function NotYet({ eyebrow, title, job, phase }: { eyebrow: string; title: string; job: string; phase: string }) {
-  return (
-    <div>
-      <PageHeader eyebrow={eyebrow} title={title}>
-        {job}
-      </PageHeader>
-      <Notice>
-        Not built yet. It arrives in {phase}. Meanwhile,{" "}
-        <Link to="/methodology" className="text-text underline decoration-line underline-offset-4">
-          read how the grades work
-        </Link>
-        .
-      </Notice>
-    </div>
-  );
-}
-
-export const SimulatorPage = () => (
-  <NotYet
-    eyebrow="Simulator"
-    title="Decision simulator"
-    job="Set up any fourth down and see what the model says."
-    phase="Phase 4"
-  />
-);
+import { PageHeader } from "../components/PageHeader";
 
 export const NotFoundPage = () => (
   <div>
