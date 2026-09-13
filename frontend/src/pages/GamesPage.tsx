@@ -13,6 +13,7 @@ const GRADING_LABEL: Record<GradingStatus, string> = {
   awaiting_plays: "Awaiting play-by-play",
   not_final: "Not final",
   not_processed: "Not graded yet",
+  provisional: "Live grades",
 };
 
 /** Games for one week, linking to game pages. Defaults to the latest graded week. */
@@ -74,6 +75,7 @@ const NAV_BUTTON =
 
 function GameRow({ game: g }: { game: GameSummary }) {
   const graded = g.grading_status === "graded" || g.grading_status === "no_fourth_downs";
+  // Live-graded games show their status until batch grades land.
   return (
     <li className="bg-field">
       <Link to={`/game/${g.id}`} className="flex min-h-[72px] items-center gap-3 px-4 py-3 hover:bg-panel">

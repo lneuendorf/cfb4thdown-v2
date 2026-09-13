@@ -66,6 +66,8 @@ export interface Decision extends OptionWps {
   play_type?: string | null;
   clock_source?: string | null;
   timeouts_imputed?: boolean;
+  /** Live grades late in a half, where live timeout counts are least reliable. */
+  timeouts_uncertain?: boolean;
   model_version?: string | null;
 }
 
@@ -86,6 +88,9 @@ export interface PendingDecision extends OptionWps {
   recommendation: Option;
   confidence?: Confidence | null;
   margin?: number | null;
+  /** When the scoreboard showing this fourth down was read (ISO 8601). */
+  polled_at?: string;
+  timeouts_uncertain?: boolean;
 }
 
 export interface TickerGame {
@@ -107,6 +112,8 @@ export interface LiveScoreboard {
   wp_lost_today: number;
   followed_model_rate: number | null;
   pending: PendingDecision | null;
+  /** Every game currently on fourth down, most leverage first (`pending` is the first). */
+  pending_all?: PendingDecision[];
   decisions: Decision[];
   ticker: TickerGame[];
 }
@@ -121,7 +128,8 @@ export type GradingStatus =
   | "failed_quality_gate"
   | "awaiting_plays"
   | "not_final"
-  | "not_processed";
+  | "not_processed"
+  | "provisional";
 
 export interface GameSummary {
   id: string;
@@ -154,6 +162,8 @@ export interface GameDetail {
   wp_series: WpPoint[];
   decisions: Decision[];
   totals: Record<"home" | "away", { fourth_downs: number; wp_delta: number }>;
+  /** Live (ESPN) play id → batch (CFBD) play id, so old #play- links still land. */
+  play_aliases?: Record<string, string>;
 }
 
 export interface WeekScoreboard extends LiveScoreboard {

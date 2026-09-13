@@ -10,19 +10,29 @@ import { useApi } from "../hooks/useApi";
 import { formatDelta, teamLabel } from "../lib/format";
 import type { GameDetail } from "../lib/types";
 
+const LIVE_REFRESH_MS = 30_000;
+
 const STATUS_LABEL = { final: "Final", scheduled: "Scheduled", in_progress: "In progress" } as const;
 
 /** Game page (sitemap §2): the thing people link to after a game ends. */
 export function GamePage() {
   const { gameId = "" } = useParams();
   const valid = /^\d+$/.test(gameId);
-  const { state, data, meta, error } = useApi<GameDetail>(valid ? `/games/${gameId}` : null);
+  // In-progress games refresh while live grades come in; final games load once.
+  const { state, data, meta, error } = useApi<GameDetail>(
+    valid ? `/games/${gameId}` : null,
+    (d) => (d?.game.status === "in_progress" ? LIVE_REFRESH_MS : null),
+    { keepPrevious: true },
+  );
   const location = useLocation();
 
-  // Deep links (#play-<id>) scroll once the decisions have rendered.
+  // Deep links (#play-<id>) scroll once the decisions have rendered. A link to a live (ESPN)
+  // play id lands on the same play after its batch (CFBD) grade replaces it.
   useEffect(() => {
     if (!data || !location.hash) return;
-    document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: "center" });
+    const id = location.hash.slice("#play-".length);
+    const target = data.play_aliases?.[id] ?? id;
+    document.getElementById(`play-${target}`)?.scrollIntoView({ block: "center" });
   }, [data, location.hash]);
 
   const mostImpactful = useMemo(() => {
@@ -63,7 +73,10 @@ export function GamePage() {
   }
 
   const g = data?.game;
-  const graded = data?.grading.status === "graded" || data?.grading.status === "no_fourth_downs";
+  const graded =
+    data?.grading.status === "graded" ||
+    data?.grading.status === "no_fourth_downs" ||
+    data?.grading.status === "provisional";
   const netTone = (v: number): "bad" | "default" => (v < 0 ? "bad" : "default");
 
   return (

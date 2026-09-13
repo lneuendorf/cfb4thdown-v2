@@ -45,7 +45,7 @@ export function DecisionCard({
 }) {
   const estimated = [
     d.clock_source === "interpolated" ? "clock" : null,
-    d.timeouts_imputed ? "timeouts" : null,
+    d.timeouts_imputed || d.timeouts_uncertain ? "timeouts" : null,
   ].filter(Boolean);
   const title = situation(d.down, d.distance, d.yards_to_goal, d.offense, d.defense);
   return (
@@ -124,6 +124,17 @@ export function PendingDecisionCard({ pending: p }: { pending: PendingDecision }
         <DecisionChipPair recommendation={p.recommendation} />
         {p.confidence && <span className="text-meta text-muted">{confidenceLabel(p.confidence)}</span>}
       </div>
+      {(p.polled_at || p.timeouts_uncertain) && (
+        <p className="mt-1 text-meta text-muted">
+          {p.polled_at && (
+            <>
+              As of <span className="font-mono">{new Date(p.polled_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" })}</span>
+            </>
+          )}
+          {p.polled_at && p.timeouts_uncertain && " · "}
+          {p.timeouts_uncertain && "Timeouts may be off this late in the half"}
+        </p>
+      )}
     </article>
   );
 }
