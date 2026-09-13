@@ -62,3 +62,24 @@ def latest_snapshot(
 def read_snapshot(path: Path) -> Any:
     with gzip.open(path, "rt", encoding="utf-8") as f:
         return json.load(f)
+
+
+def prune(source: str, keep_days: int, root: Path = RAW_DIR) -> int:
+    """Delete snapshots of `source` fetched more than `keep_days` ago. Returns files removed.
+
+    For high-volume live data only (ESPN polls every 20 s); settled CFBD data is never pruned.
+    """
+    cutoff = datetime.now(UTC).timestamp() - keep_days * 86400
+    removed = 0
+    base = root / source
+    if not base.exists():
+        return 0
+    for path in base.rglob("*.json.gz"):
+        try:
+            fetched = snapshot_time(path).timestamp()
+        except ValueError:
+            continue
+        if fetched < cutoff:
+            path.unlink()
+            removed += 1
+    return removed

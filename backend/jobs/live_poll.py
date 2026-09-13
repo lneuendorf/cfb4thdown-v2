@@ -189,7 +189,11 @@ class SummarySource:
 def process(
     conn, board: dict, board_path: str, polled_at: str, summaries: SummarySource
 ) -> Counter:
-    games = [g for g in espn.parse_scoreboard(board) if g.state == "in"]
+    parsed = espn.parse_scoreboard(board)
+    games = [g for g in parsed if g.state == "in"]
+    # Games that finished recently still need their last fourth downs graded from the final
+    # summary, until batch grading takes over.
+    finished = [g for g in parsed if g.state == "post" and summaries.get(g.game_id) is not None]
     counts: Counter = Counter(live_games=len(games))
     pending, reasons = pending_rows(games, summaries, conn, polled_at, board_path)
     counts.update({f"pending_skipped_{k}": v for k, v in reasons.items()})
@@ -204,7 +208,10 @@ def process(
         conn.execute("DELETE FROM live_pending")
     db.upsert_rows(conn, "live_pending", pending)
     counts["pending"] = len(pending)
-    decided, reasons = decision_rows(games, summaries, conn, polled_at)
+    batch = _batch_graded(conn, [g.game_id for g in games + finished])
+    decided, reasons = decision_rows(
+        [g for g in games + finished if g.game_id not in batch], summaries, conn, polled_at
+    )
     counts.update({f"decision_skipped_{k}": v for k, v in reasons.items()})
     db.upsert_rows(conn, "live_decisions", decided)
     counts["decisions_graded"] = len(decided)
@@ -213,17 +220,81 @@ def process(
     return counts
 
 
+def _batch_graded(conn, game_ids: list[int]) -> set[int]:
+    if not game_ids:
+        return set()
+    marks = ",".join("?" for _ in game_ids)
+    rows = conn.execute(
+        f"SELECT game_id FROM game_sources WHERE status = 'graded' AND game_id IN ({marks})",
+        game_ids,
+    )
+    return {r[0] for r in rows}
+
+
+class LivePoller:
+    """Polls with a request budget, keeping summaries between polls.
+
+    Per poll: one scoreboard request, plus a summary only for
+    - games on third or fourth down (a pending card may be about to appear or clear);
+    - other live games whose summary is older than SUMMARY_REFRESH_SECONDS;
+    - games that just went final (once), to grade their last fourth downs.
+    v1 fetched every live game's summary every poll (about 48 requests a minute with 15 live
+    games at 20 s); this is roughly 15-25.
+    """
+
+    SUMMARY_REFRESH_SECONDS = 300
+
+    def __init__(self) -> None:
+        self.summaries = SummarySource()
+        self.fetched_at: dict[int, float] = {}
+        self.final_fetched: set[int] = set()
+        self.last_board: dict | None = None
+
+    def due(self, games: list, now: float) -> list[int]:
+        out = []
+        for g in games:
+            if g.state == "in":
+                near = g.situation.get("down") in (3, 4)
+                stale = now - self.fetched_at.get(g.game_id, float("-inf")) >= (
+                    self.SUMMARY_REFRESH_SECONDS
+                )
+                if near or stale:
+                    out.append(g.game_id)
+            elif (
+                g.state == "post"
+                and g.game_id in self.fetched_at
+                and g.game_id not in self.final_fetched
+            ):
+                out.append(g.game_id)
+        return out
+
+    def poll(self, conn) -> Counter:
+        board, board_path = espn.fetch_scoreboard()
+        self.last_board = board
+        polled_at = datetime.now(UTC).isoformat()
+        games = espn.parse_scoreboard(board)
+        now = time.monotonic()
+        due = self.due(games, now)
+        failed = 0
+        for game_id in due:
+            try:
+                summary, path = espn.fetch_summary(str(game_id))
+            except espn.ESPNError as exc:
+                failed += 1
+                LOG.warning("summary %s failed: %s", game_id, exc)
+                continue
+            self.summaries.put(game_id, summary, path)
+            self.fetched_at[game_id] = now
+            if any(g.game_id == game_id and g.state == "post" for g in games):
+                self.final_fetched.add(game_id)
+        counts = process(conn, board, board_path, polled_at, self.summaries)
+        counts["summaries_fetched"] = len(due) - failed
+        counts["summaries_failed"] = failed
+        return counts
+
+
 def poll_once(conn) -> Counter:
-    board, board_path = espn.fetch_scoreboard()
-    polled_at = datetime.now(UTC).isoformat()
-    summaries = SummarySource()
-    for g in espn.parse_scoreboard(board):
-        if g.state != "in":
-            continue
-        # Summaries are needed for play-by-play and for possession when the scoreboard omits it.
-        summary, path = espn.fetch_summary(str(g.game_id))
-        summaries.put(g.game_id, summary, path)
-    return process(conn, board, board_path, polled_at, summaries)
+    return LivePoller().poll(conn)
 
 
 def replay(conn) -> Counter:
@@ -278,8 +349,9 @@ def main() -> None:
             elif args.once:
                 total = poll_once(conn)
             else:
+                poller = LivePoller()
                 while True:
-                    counts = poll_once(conn)
+                    counts = poller.poll(conn)
                     total.update(counts)
                     LOG.info("%s", dict(counts))
                     if counts["live_games"] == 0:
